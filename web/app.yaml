@@ -1,0 +1,20 @@
+application: snaga-team
+version: alpha-000
+runtime: go
+api_version: go1
+
+handlers:
+- url: /
+  static_files: public/index.html
+  upload: public/index.html
+- url: /(.*)
+  static_files: public/\1
+  upload: public/(.*)
+skip_files:
+- ^/src/.*
+
+automatic_scaling:
+  min_idle_instances: 0
+  max_idle_instances: 1
+  min_pending_latency: 30ms  # default value
+  max_pending_latency: automatic
