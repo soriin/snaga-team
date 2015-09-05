@@ -8,10 +8,12 @@ handlers:
   static_files: public/index.html
   upload: public/index.html
 - url: /(.*)
+  #static_files: public/index.html
+  # upload: public/index.html
   static_files: public/\1
   upload: public/(.*)
 skip_files:
-- ^/src/.*
+- ^src/.*
 
 automatic_scaling:
   min_idle_instances: 0

@@ -8,7 +8,7 @@ exports.config = {
 	},
 
 	paths: {
-		"public": 'public',
+		"public": path.resolve('../public'),
 		"watched": ['app', 'vendor']
 	},
 
