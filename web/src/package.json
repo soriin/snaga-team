@@ -20,7 +20,7 @@
   "devDependencies": {
     "bower": "~1.5.2",
     "brunch": "~1.8.5",
-  	"browser-sync-brunch": "~0.0.9",
+  	"browser-sync-brunch": "^0.0.9",
   	"traceur-brunch": "ocombe/traceur-brunch.git",
   	"sass-brunch": "~1.8.11",
   	"postcss-brunch": "~0.5.0",

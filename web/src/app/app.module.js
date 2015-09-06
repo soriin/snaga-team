@@ -1,5 +1,5 @@
 // Declare app level module which depends on filters, and services
-angular.module('app', ['ngSanitize', 'ngResource', 'ui.router', 'oc.modal'])
+angular.module('app', ['ngSanitize', 'ngResource', 'ui.router'])
 	.constant('VERSION', '0.0.0')
 	.config(function appConfig($stateProvider, $locationProvider, $urlRouterProvider) {
 		$locationProvider.hashPrefix('!');

@@ -23,7 +23,8 @@ exports.config = {
 					'bower_components/modernizr/modernizr.js',
 					'bower_components/jquery/dist/jquery.js',
 					'bower_components/lodash/dist/lodash.js',
-					'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
+					'bower_components/bootstrap/dist/js/bootstrap.js',
+					'bower_components/webcomponentsjs/webcomponents.js',
 
 					// angular
 					'bower_components/angular/angular.js',
@@ -37,7 +38,7 @@ exports.config = {
 			order: {
 				before: [
 					// jquery
-					'bower_components/jquery/jquery.js',
+					'bower_components/jquery/dist/jquery.js',
 
 					// angular
 					'bower_components/angular/angular.js',
@@ -49,7 +50,7 @@ exports.config = {
 		},
 		stylesheets: {
 			joinTo: {
-				'css/app.css': /^app/
+				'css/app.css': [/^app/, 'bower_components/bootstrap/scss/bootstrap.scss']
 			}
 		}
 	},
