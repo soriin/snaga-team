@@ -3,14 +3,17 @@
   "version": "0.0.0",
   "dependencies": {
     "angular": "~1.4.5",
+    "angular-mocks": "~1.4.5",
     "angular-resource": "~1.4.5",
     "angular-sanitize": "~1.4.5",
-    "angular-mocks": "~1.4.5",
     "angular-ui-router": "0.2.15",
+    "bootstrap": "^4.0.0",
+    "bootstrap-sass-official": "~3.3.1",
     "jquery": "~2.1.4",
     "lodash": "~3.10.1",
     "ocModal": "~0.1.10",
-    "bootstrap-sass-official": "~3.3.1"
+    "polymer": "Polymer/polymer#^1.0.0",
+    "webcomponentsjs": "~0.7.12"
   },
   "overrides": {
     "angular-mocks": {
@@ -24,13 +27,13 @@
     },
     "bootstrap-sass-official": {
       "main": [
-		"assets/stylesheets/_bootstrap.scss",
-		"assets/fonts/bootstrap/glyphicons-halflings-regular.eot",
-		"assets/fonts/bootstrap/glyphicons-halflings-regular.svg",
-		"assets/fonts/bootstrap/glyphicons-halflings-regular.ttf",
-		"assets/fonts/bootstrap/glyphicons-halflings-regular.woff",
-		"assets/javascripts/bootstrap.js"
-		]
+        "assets/stylesheets/_bootstrap.scss",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.eot",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.svg",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.ttf",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.woff",
+        "assets/javascripts/bootstrap.js"
+      ]
     }
   },
   "resolutions": {
