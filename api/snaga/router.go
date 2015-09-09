@@ -4,7 +4,7 @@ import (
   "fmt"
   "net/http"
   "github.com/gorilla/mux"
-  "controllers"
+  "snaga-team/controllers"
 )
 
 func init() {

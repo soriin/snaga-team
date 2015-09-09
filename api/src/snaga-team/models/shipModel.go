@@ -1,7 +1,7 @@
 package models
 
 type Ship struct {
-	Id int
+	Id string
 	DisplayName string
 	InGameName string
 }
