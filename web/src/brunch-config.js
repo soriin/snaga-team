@@ -24,7 +24,7 @@ exports.config = {
 					'bower_components/jquery/dist/jquery.js',
 					'bower_components/lodash/dist/lodash.js',
 					'bower_components/bootstrap/dist/js/bootstrap.js',
-					'bower_components/webcomponentsjs/webcomponents.js',
+					'bower_components/webcomponentsjs/webcomponents-lite.js',
 
 					// angular
 					'bower_components/angular/angular.js',
@@ -72,7 +72,13 @@ exports.config = {
 				"ie >= 9"
 			],
 			cascade: false
-		}
+		},
+		afterBrunch: [
+			'mkdir "../public/bower_components"',
+			'cp -R  bower_components/*paper* ../public/bower_components/',
+			'cp -R  bower_components/*iron* ../public/bower_components/',
+			'cp -R  bower_components/*polymer* ../public/bower_components/'
+		]
 	},
 
 	server: {

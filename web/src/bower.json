@@ -9,7 +9,10 @@
     "angular-ui-router": "0.2.15",
     "bootstrap": "^4",
     "jquery": "~2.1.4",
-    "lodash": "~3.10.1"
+    "lodash": "~3.10.1",
+    "polymer": "Polymer/polymer#^1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#1.0.1",
+    "webcomponentsjs": "~0.7.12"
   },
   "overrides": {
     "angular-mocks": {
@@ -30,6 +33,39 @@
         "assets/fonts/bootstrap/glyphicons-halflings-regular.woff",
         "assets/javascripts/bootstrap.js"
       ]
+    },
+    "paper-checkbox": {
+      "main" : "paper-checkbox.html"
+    },
+    "paper-drawer-panel": {
+      "main" : "paper-drawer-panel.html"
+    },
+    "paper-radio-button": {
+      "main" : "paper-radio-button.html"
+    },
+    "paper-radio-group": {
+      "main" : "paper-radio-group.html"
+    },
+    "paper-spinner": {
+      "main" : "paper-spinner.html"
+    },
+    "paper-toggle-button": {
+      "main" : "paper-toggle-button.html"
+    },
+    "iron-flex-layout": {
+      "main" : "iron-flex-layout.html"
+    },
+    "iron-media-query": {
+      "main" : "iron-media-query.html"
+    },
+    "iron-collapse": {
+      "main" : "iron-collapse.html"
+    },
+    "iron-iconset-svg": {
+      "main" : "iron-iconset-svg.html"
+    },
+    "iron-meta": {
+      "main" : "iron-meta.html"
     }
   },
   "resolutions": {
