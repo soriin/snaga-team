@@ -1,7 +1,6 @@
 package controllers
 
 import (
-  "fmt"
   "net/http"
 
   "github.com/gorilla/mux"
@@ -19,13 +18,37 @@ func InitShipControllerHandlers(router *mux.Router) {
 }
 
 func allShips(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprint(w, "All Ships!")
+  c := appengine.NewContext(r)
+  q := datastore.NewQuery("ship")
+  var ships []models.Ship
+
+  for t := q.Run(c); ; {
+    var x models.Ship
+    key, err := t.Next(&x)
+
+    if err == datastore.Done {
+      break
+    }
+    if err != nil {
+      helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+      return
+    }
+    x.Id = key.Encode()
+    ships = append(ships, x)
+  }
+
+  helpers.SendJson(w, ships)
 }
 
 func addShip(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
-  newShip := models.Ship{}
-  newShip.DisplayName = "test ship"
+  var newShip models.Ship
+  
+  err := helpers.ReadJson(r, &newShip)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
 
   key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "ship", nil), &newShip)
   newShip.Id = key.Encode()
