@@ -3,12 +3,11 @@ package controllers
 import (
   "fmt"
   "net/http"
-  "encoding/json"
 
   "github.com/gorilla/mux"
 
   "snaga-team/models"
-  "snaga-team/services/datarepo"
+  "snaga-team/helpers"
 
   "appengine"
   "appengine/datastore"
@@ -28,24 +27,17 @@ func addShip(w http.ResponseWriter, r *http.Request) {
   newShip := models.Ship{}
   newShip.DisplayName = "test ship"
 
-  repo := datarepo.NewDataRepo(c)
-  key, err := repo.Put(&newShip, "ship", nil)
+  key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "ship", nil), &newShip)
+  newShip.Id = key.Encode()
 
   if err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
   }
 
-  var savedShip models.Ship
-  if err = datastore.Get(c, key, &savedShip); err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
-    return
-  }
+  err = helpers.SendJson(w, newShip)
 
-  jStream, err := json.Marshal(newShip)
   if err != nil {
-    http.Error(w, err.Error(), http.StatusInternalServerError)
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
   }
-
-  fmt.Fprint(w, string(jStream[:]))
 }
