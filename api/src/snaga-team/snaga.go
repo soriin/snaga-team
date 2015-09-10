@@ -1,4 +1,4 @@
-package snaga
+package snagateam
 
 import (
   "fmt"
