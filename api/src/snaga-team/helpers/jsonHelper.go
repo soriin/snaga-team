@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io"
 	"fmt"
-	"net/http"
 )
 
 func SendJson(w io.Writer, obj interface{}) error {
@@ -18,8 +17,8 @@ func SendJson(w io.Writer, obj interface{}) error {
 	return nil
 }
 
-func ReadJson(r *http.Request, x interface{}) error {
-	decoder := json.NewDecoder(r.Body)
+func ReadJson(jsonObj io.Reader, x interface{}) error {
+	decoder := json.NewDecoder(jsonObj)
 	err := decoder.Decode(&x)
 	return err
 }

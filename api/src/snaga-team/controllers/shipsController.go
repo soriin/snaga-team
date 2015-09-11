@@ -46,7 +46,7 @@ func addShip(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
   var newShip models.Ship
 
-  err := helpers.ReadJson(r, &newShip)
+  err := helpers.ReadJson(r.Body, &newShip)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
