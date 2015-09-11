@@ -6,11 +6,13 @@ import (
 
 type FakeResponseWriter struct {
 	Calls map[string]int
+	Bytes []byte
 }
 
 func NewFakeResponseWriter() *FakeResponseWriter {
 	w := FakeResponseWriter{}
 	w.Calls = make(map[string]int)
+	w.Bytes = make([]byte, 0, 1)
 	return &w
 }
 
@@ -21,9 +23,14 @@ func (w *FakeResponseWriter) Header() http.Header {
 
 func (w *FakeResponseWriter) Write(b []byte) (int, error) {
 	w.Calls["Write"] = w.Calls["Write"] + 1
-	return 0, nil
+	w.Bytes = append(w.Bytes, b...)
+	return len(b), nil
 }
 
 func (w *FakeResponseWriter) WriteHeader(int) {
 	w.Calls["WriteHeader"] = w.Calls["WriteHeader"] + 1
+}
+
+func (w *FakeResponseWriter) GetOutput() []byte {
+	return w.Bytes
 }

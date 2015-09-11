@@ -1,1 +1,1 @@
-goapp test snaga-team\helpers
+goapp test snaga-team\helpers snaga-team\controllers

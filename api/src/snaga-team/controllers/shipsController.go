@@ -2,6 +2,7 @@ package controllers
 
 import (
   "net/http"
+  "fmt"
   // "reflect"
 
   "github.com/gorilla/mux"
@@ -21,6 +22,10 @@ func InitShipControllerHandlers(router *mux.Router) {
 
 func allShips(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
+  processAllShips(c, w, r)
+}
+
+func processAllShips(c appengine.Context, w http.ResponseWriter, r *http.Request) {
   q := datastore.NewQuery("ship")
   var ships []models.Ship
 
@@ -39,6 +44,7 @@ func allShips(w http.ResponseWriter, r *http.Request) {
     ships = append(ships, x)
   }
 
+  fmt.Printf("Ships returned: %v\n", ships)
   helpers.SendJson(w, ships)
 }
 
