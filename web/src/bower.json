@@ -12,7 +12,8 @@
     "lodash": "~3.10.1",
     "polymer": "Polymer/polymer#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#1.0.1",
-    "webcomponentsjs": "~0.7.12"
+    "webcomponentsjs": "~0.7.12",
+    "ng-polymer-elements": "^0.3.0"
   },
   "overrides": {
     "angular-mocks": {
@@ -66,6 +67,12 @@
     },
     "iron-meta": {
       "main" : "iron-meta.html"
+    },
+    "ng-polymer-elements": {
+      "main" : "ng-polymer-elements.js"
+    },
+    "webcomponentsjs": {
+      "main" : "webcomponents-lite.js"
     }
   },
   "resolutions": {
