@@ -50,6 +50,10 @@ func processAllShips(c appengine.Context, w http.ResponseWriter, r *http.Request
 
 func addShip(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
+  processAddShip(c, w, r)
+}
+
+func processAddShip(c appengine.Context, w http.ResponseWriter, r *http.Request) {
   var newShip models.Ship
 
   err := helpers.ReadJson(r.Body, &newShip)
