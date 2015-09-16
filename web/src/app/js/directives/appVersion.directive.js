@@ -1,7 +1,7 @@
 angular.module('app').directive('appVersion', function appVersion() {
 	return {
 		restrict: 'E',
-		template: '<span>{{ "%VERSION%" | interpolate  }}</span>',
+		template: '<span>v{{ "%VERSION%" | interpolate  }}</span>',
 		link: link
 	};
 

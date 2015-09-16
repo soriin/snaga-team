@@ -7,31 +7,52 @@
         <meta name="author" content="">
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <meta name="fragment" content="!" />
+        <meta name="google-signin-client_id" content="591560570540-9o9v5iek3ig83311gpna7kn6kk1qu5ea.apps.googleusercontent.com">
+        <meta name="google-signin-scope" content="email">
         <link rel="stylesheet" href="css/app.css">
         <link rel="import" href="bower_components/paper-button/paper-button.html">
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
 	    <base href="/" />
     </head>
     <body ng-controller="AppCtrl">
-        <div ng-include="'/partials/nav.html'"></div>
+      <div class="container-fluid">
+        <div ui-view="mainView"></div>
+      </div>
+      <div class="g-signin2" data-onsuccess="onSignIn"></div>
+      <a href="#" onclick="signOut();">Sign out</a>
+<script>
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+</script>
 
-        <div class="wrapper">
-            <div class="container main-content">
-                <div ui-view="mainView"></div>
-            </div>
-            <div class="push"></div>
-        </div>
-        <br/>
-        <footer class="footer">
-            <div class="container">
-                <div>Angular Brunch seed app: <app-version></app-version></div>
-                <paper-button>flat button</paper-button>
-                <small><a href="https://github.com/ocombe/angular-brunch-seed-no-fuss">Angular & brunch - No fuss | Source</a></small>
-            </div>
-        </footer>
-        <script src="/js/vendor.js"></script>
-        <script src="/js/app.js"></script>
-        <script type='text/javascript' id="__bs_script__">//<![CDATA[
-    document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.2.1.6.js'><\/script>".replace(/HOST/g, location.hostname).replace(/PORT/g, location.port));
-//]]></script>
+      <script>
+        function onSignIn(googleUser) {
+          // Useful data for your client-side scripts:
+          var profile = googleUser.getBasicProfile();
+          console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+          console.log("Name: " + profile.getName());
+          console.log("Image URL: " + profile.getImageUrl());
+          console.log("Email: " + profile.getEmail());
+
+          // The ID token you need to pass to your backend:
+          var id_token = googleUser.getAuthResponse().id_token;
+          console.log("ID Token: " + id_token);
+        };
+      </script>
+      <div class="container">
+        <foooter><app-version></app-version></foooter>
+      </div>
+
+      <script src="/js/vendor.js"></script>
+      <script src="/js/app.js"></script>
+      <script type='text/javascript' id="__bs_script__">
+        //<![CDATA[
+        document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.2.1.6.js'><\/script>".replace(/HOST/g, location.hostname).replace(/PORT/g, location.port));
+        //]]>
+      </script>
     </body>
 </html>
