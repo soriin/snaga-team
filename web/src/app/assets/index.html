@@ -35,7 +35,7 @@
       // Manually bootstrap angular so that I can check for whether or not the user is already logged in
       // to google provider and had given us prior access.
       gapi.load('auth2', function() {
-		    gapi.auth2.init({client_id: '591560570540-9o9v5iek3ig83311gpna7kn6kk1qu5ea.apps.googleusercontent.com', scope: 'profile email'}).then( function() {
+		    gapi.auth2.init({client_id: '591560570540-9o9v5iek3ig83311gpna7kn6kk1qu5ea.apps.googleusercontent.com', scope: 'profile'}).then( function() {
           angular.element(document).ready(function() {
             angular.bootstrap(document, ['app']);
           });

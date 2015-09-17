@@ -4,6 +4,7 @@ angular.module('app').controller('LoginCtrl', ['$scope', '$window', '$location',
 	$scope.logout = logout;
 
 	$window.gapi.signin2.render('googleSigninBtn', {
+		'scope': 'profile',
     'width': 100,
     'height': 40,
     'longtitle': false,
