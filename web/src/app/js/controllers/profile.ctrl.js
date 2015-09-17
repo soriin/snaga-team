@@ -4,5 +4,6 @@ angular.module('app').controller('ProfileCtrl', ['$scope', '$window', '$state',
 			$state.go("login");
 			return;
 		}
+
 		$scope.someText = "HI, " + $window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName();
 }]);

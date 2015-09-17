@@ -4,13 +4,17 @@ angular.module('app').controller('LoginCtrl', ['$scope', '$window', '$location',
 	$scope.logout = logout;
 
 	$window.gapi.signin2.render('googleSigninBtn', {
-                'scope': 'https://www.googleapis.com/auth/plus.login',
-                'width': 200,
-                'height': 50,
-                'longtitle': true,
-                'theme': 'dark',
-                'onsuccess': $scope.login
-            });
+    'width': 100,
+    'height': 40,
+    'longtitle': false,
+    'theme': 'dark',
+    'onsuccess': $scope.login,
+		'onfailure': $scope.loginFail
+  });
+
+	function loginFail(e) {
+		console.log(e);
+	};
 
 	function login(googleUser) {
 		var profile = googleUser.getBasicProfile();
@@ -23,7 +27,7 @@ angular.module('app').controller('LoginCtrl', ['$scope', '$window', '$location',
 		console.log("ID Token: " + id_token);
 
 		$window.gapi.auth2.getAuthInstance().then(function () { $state.go("profile"); })
-
+		$scope.$digest();
 	};
 
 	function logout() {
