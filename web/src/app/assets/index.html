@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en" ng-app="app">
+<html class="no-js" lang="en">
     <head>
         <meta charset="utf-8">
         <title ng-bind-template="{{title}}"></title>
@@ -11,38 +11,15 @@
         <meta name="google-signin-scope" content="email">
         <link rel="stylesheet" href="css/app.css">
         <link rel="import" href="bower_components/paper-button/paper-button.html">
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
 	    <base href="/" />
     </head>
     <body ng-controller="AppCtrl">
+      <div class="container">
+        <div ng-include="'partials/login_nav.html'" ng-controller="LoginCtrl"></div>
+      </div>
       <div class="container-fluid">
         <div ui-view="mainView"></div>
       </div>
-      <div class="g-signin2" data-onsuccess="onSignIn"></div>
-      <a href="#" onclick="signOut();">Sign out</a>
-<script>
-  function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
-  }
-</script>
-
-      <script>
-        function onSignIn(googleUser) {
-          // Useful data for your client-side scripts:
-          var profile = googleUser.getBasicProfile();
-          console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-          console.log("Name: " + profile.getName());
-          console.log("Image URL: " + profile.getImageUrl());
-          console.log("Email: " + profile.getEmail());
-
-          // The ID token you need to pass to your backend:
-          var id_token = googleUser.getAuthResponse().id_token;
-          console.log("ID Token: " + id_token);
-        };
-      </script>
       <div class="container">
         <foooter><app-version></app-version></foooter>
       </div>
@@ -53,6 +30,17 @@
         //<![CDATA[
         document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.2.1.6.js'><\/script>".replace(/HOST/g, location.hostname).replace(/PORT/g, location.port));
         //]]>
+      </script>
+      <script type='text/javascript'>
+        // Manually bootstrap angular so that I can check for whether or not the user is already logged in
+        // to google provider.
+        gapi.load('auth2', function() {
+  		    gapi.auth2.init().then( function() {
+            angular.element(document).ready(function() {
+              angular.bootstrap(document, ['app']);
+            });
+          })
+        });
       </script>
     </body>
 </html>

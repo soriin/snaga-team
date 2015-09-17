@@ -1,8 +1,7 @@
-// Declare app level module which depends on filters, and services
 angular.module('app', ['ngSanitize', 'ngResource', 'ui.router'])
 	.constant('VERSION', '0.1.0')
 	.config(function appConfig($stateProvider, $locationProvider, $urlRouterProvider) {
-		// $locationProvider.hashPrefix('!');
+		$locationProvider.hashPrefix('!');
 		$urlRouterProvider.otherwise("/login");
 
 		$stateProvider.state('login', {
@@ -13,8 +12,16 @@ angular.module('app', ['ngSanitize', 'ngResource', 'ui.router'])
 					controller: 'LoginCtrl'
 				}
 			}
+		})
+		.state('profile', {
+			url: "/profile",
+			views: {
+				"mainView": {
+					templateUrl: "partials/profile.html",
+					controller: 'ProfileCtrl'
+				}
+			}
 		});
 
-		// /!\ Without server side support html5 must be disabled.
 		return $locationProvider.html5Mode(false);
 	});
