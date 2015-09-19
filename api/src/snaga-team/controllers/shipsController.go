@@ -1,18 +1,15 @@
 package controllers
 
 import (
-  "net/http"
-  "fmt"
-  // "reflect"
+  "appengine"
+  "appengine/datastore"
 
   "github.com/gorilla/mux"
 
-  "snaga-team/models"
-  "snaga-team/helpers"
-  // "snaga-team/services/datarepo"
+  "net/http"
 
-  "appengine"
-  "appengine/datastore"
+  "snaga-team/helpers"
+  "snaga-team/models"    
 )
 
 func InitShipControllerHandlers(router *mux.Router) {
@@ -44,7 +41,6 @@ func processAllShips(c appengine.Context, w http.ResponseWriter, r *http.Request
     ships = append(ships, x)
   }
 
-  fmt.Printf("Ships returned: %v\n", ships)
   helpers.SendJson(w, ships)
 }
 
