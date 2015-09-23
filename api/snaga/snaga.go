@@ -1,4 +1,4 @@
-package snagateam
+package api
 
 import (
   "fmt"
