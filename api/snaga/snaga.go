@@ -9,12 +9,12 @@ import (
 
 func init() {
   r := mux.NewRouter()
-  r.HandleFunc("/", handler)
-
-  userRoutes := r.PathPrefix("/users").Subrouter()
+  apiRouter := r.PathPrefix("/api").Subrouter()
+  apiRouter.HandleFunc("/", handler)
+  userRoutes := apiRouter.PathPrefix("/users").Subrouter()
   controllers.InitUserControllerHandlers(userRoutes)
 
-  shipRoutes := r.PathPrefix("/ships").Subrouter()
+  shipRoutes := apiRouter.PathPrefix("/ships").Subrouter()
   controllers.InitShipControllerHandlers(shipRoutes)
 
   http.Handle("/", r)
