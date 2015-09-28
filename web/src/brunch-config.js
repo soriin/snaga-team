@@ -27,6 +27,7 @@ exports.config = {
 					'bower_components/webcomponentsjs/webcomponents-lite.js',
 					'bower_components/web-animations-js/web-animations.min.js',
 					'bower_components/ng-polymer-elements/ng-polymer-elements.js',
+					'bower_components/angular-cookies/angular-cookies.js',
 
 					// angular
 					'bower_components/angular/angular.js',

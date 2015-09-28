@@ -6,12 +6,8 @@ import (
 
   "github.com/gorilla/mux"
 
-  "golang.org/x/net/context"
-  "golang.org/x/oauth2/google"
-
-  "google.golang.org/api/oauth2/v2"
-
   "net/http"
+  "strings"
 
   "snaga-team/helpers"
   "snaga-team/models"
@@ -20,6 +16,7 @@ import (
 func InitUserControllerHandlers(router *mux.Router) {
   router.HandleFunc("/", allUsers).Methods("GET")
   router.HandleFunc("/", addUser).Methods("POST")
+  router.HandleFunc("/{id}", updateUser).Methods("PUT")
   router.HandleFunc("/", deleteUser).Methods("DELETE")
 }
 
@@ -57,40 +54,78 @@ func addUser(w http.ResponseWriter, r *http.Request) {
 
 func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request) {
   var newUser models.User
-  content := struct{TokenId string}{}
-
-  err := helpers.ReadJson(r.Body, &content)
+  tokenEmail := ""
+  thisUser, err := getUserWithEmail(c, tokenEmail)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
   }
-
-  ctx := context.Background()
-  client, err := google.DefaultClient(ctx, oauth2.UserinfoProfileScope)
-  if err != nil {
-    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+  if thisUser != nil {
+    helpers.SendError(w, "", http.StatusConflict)
     return
   }
 
-  oauth2Service, err := oauth2.New(client)
+  err = helpers.ReadJson(r.Body, &newUser)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
-    return
-  }
-
-  tokenSvc := oauth2Service.Tokeninfo()
-  tokenSvc = tokenSvc.AccessToken(content.TokenId)
-  tokenInfo, err := tokenSvc.Do()
-  if err != nil {
-    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
-    return
-  }
-
-  if tokenInfo.ExpiresIn == 0 {
     return
   }
 
   key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "user", nil), &newUser)
+  newUser.Id = key.Encode()
+
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
+  err = helpers.SendJson(w, newUser)
+
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+  }
+}
+
+func updateUser(w http.ResponseWriter, r *http.Request) {
+  c := appengine.NewContext(r)
+  processUpdateUser(c, w, r)
+}
+
+func processUpdateUser(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+  var newUser models.User
+  //tokenEmail := "keth_is_the_man@getmoney.org"
+  id := mux.Vars(r)["id"]
+  tokenEmail, err := helpers.VerifyGoogleToken(c, r)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
+  err = helpers.ReadJson(r.Body, &newUser)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
+  myKey, err := datastore.DecodeKey(id)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusNotFound)
+    return
+  }
+
+  var currentUserData models.User
+  err = datastore.Get(c, myKey, &currentUserData)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
+  if strings.ToLower(tokenEmail) != strings.ToLower(currentUserData.Email) {
+    helpers.SendError(w, "User not authorized to modify this user's data", http.StatusForbidden)
+    return
+  }
+
+  key, err := datastore.Put(c, myKey, &newUser)
   newUser.Id = key.Encode()
 
   if err != nil {
@@ -112,4 +147,20 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 
 func processDeleteUser(c appengine.Context, w http.ResponseWriter, r *http.Request) {
 
+}
+
+func getUserWithEmail(c appengine.Context, email string) (*models.User, error) {
+  q := datastore.NewQuery("user").Filter("Email =", email)
+
+  var x models.User
+  key, err := q.Run(c).Next(&x)
+
+  if err == datastore.Done {
+    return nil, nil
+  }
+  if err != nil {
+    return nil, err
+  }
+  x.Id = key.Encode()
+  return &x, nil
 }

@@ -1,4 +1,4 @@
-angular.module('app', ['ngSanitize', 'ngResource', 'ui.router'])
+angular.module('app', ['ngSanitize', 'ngResource', 'ui.router', 'ngCookies'])
 	.constant('VERSION', '0.1.0')
 	.config(function appConfig($stateProvider, $locationProvider, $urlRouterProvider) {
 		$locationProvider.hashPrefix('!');

@@ -1,5 +1,5 @@
-angular.module('app').controller('LoginCtrl', ['$scope', '$window', '$location', '$state',
- function LoginCtrl($scope, $window, $location, $state) {
+angular.module('app').controller('LoginCtrl', ['$scope', '$window', '$location', '$state', '$cookieStore',
+ function LoginCtrl($scope, $window, $location, $state, $cookieStore) {
 	$scope.login = login;
 	$scope.logout = logout;
 
@@ -26,6 +26,7 @@ angular.module('app').controller('LoginCtrl', ['$scope', '$window', '$location',
 		// The ID token you need to pass to your backend:
 		var id_token = googleUser.getAuthResponse().id_token;
 		console.log("ID Token: " + id_token);
+    $cookieStore.put('token', id_token)
 
 		$window.gapi.auth2.getAuthInstance().then(function () { $state.go("profile"); })
 		$scope.$digest();
