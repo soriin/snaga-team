@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"appengine"
 	"net/http"
-	"golang.org/x/net/context"
+	appeng "google.golang.org/appengine"
 	"golang.org/x/oauth2/google"
 
 	"google.golang.org/api/oauth2/v2"
@@ -20,8 +20,8 @@ func VerifyGoogleToken(c appengine.Context, r *http.Request) (string, error) {
 	}
 	tokenId := tokenHeader[0]
 
-	//ctx := context.TODO()
-	client, err := google.DefaultClient(context.Background(), oauth2.UserinfoProfileScope)
+	ctx := appeng.NewContext(r)
+	client, err := google.DefaultClient(ctx, oauth2.UserinfoProfileScope)
 	if err != nil {
 	  return "", err
 	}

@@ -93,7 +93,6 @@ func updateUser(w http.ResponseWriter, r *http.Request) {
 
 func processUpdateUser(c appengine.Context, w http.ResponseWriter, r *http.Request) {
   var newUser models.User
-  //tokenEmail := "keth_is_the_man@getmoney.org"
   id := mux.Vars(r)["id"]
   tokenEmail, err := helpers.VerifyGoogleToken(c, r)
   if err != nil {
