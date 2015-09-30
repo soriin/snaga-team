@@ -7,6 +7,7 @@ import (
 type FakeResponseWriter struct {
 	Calls map[string]int
 	Bytes []byte
+	WriteHeaderValue int
 }
 
 func NewFakeResponseWriter() *FakeResponseWriter {
@@ -27,8 +28,9 @@ func (w *FakeResponseWriter) Write(b []byte) (int, error) {
 	return len(b), nil
 }
 
-func (w *FakeResponseWriter) WriteHeader(int) {
+func (w *FakeResponseWriter) WriteHeader(a int) {
 	w.Calls["WriteHeader"] = w.Calls["WriteHeader"] + 1
+	w.WriteHeaderValue = a
 }
 
 func (w *FakeResponseWriter) GetOutput() []byte {
