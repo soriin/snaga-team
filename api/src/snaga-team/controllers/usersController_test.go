@@ -23,10 +23,10 @@ func TestProcessAllUsers(t *testing.T) {
 	defer c.Close()
 
 	w := test.NewFakeResponseWriter()
-	want := "\"DisplayName\":\"test ship\",\"Manufacturer\":\"\""
+	want := "\"DisplayName\":\"snagaMan\",\"InGameName\":\"\""
 
-	aUser := models.User{DisplayName: "test ship"}
-	datastore.Put(c, datastore.NewIncompleteKey(c, "ship", nil), &aUser)
+	aUser := models.User{DisplayName: "snagaMan"}
+	datastore.Put(c, datastore.NewIncompleteKey(c, "user", nil), &aUser)
 
 	processAllUsers(c, w, nil)
 	stringOutput := string(w.GetOutput()[:])
@@ -46,11 +46,12 @@ func TestProcessAddUser(t *testing.T) {
 		t.Error(err)
 	}
 	defer c.Close()
-	want := "\"DisplayName\":\"post test\",\"Manufacturer\":\"Aegis\""
+	fakeVerifier := &test.FakeTokenVerifier{Email: "theman@getmoney.org"}
+	want := "\"Email\":\"theman@getmoney.org\""
 	w := test.NewFakeResponseWriter()
-	ship := models.User{DisplayName: "post test", Manufacturer: "Aegis"}
+	user := models.User{DisplayName: "post test", FirstName: "Aegis", Email: "theman@getmoney.org"}
 	var body bytes.Buffer
-	err = helpers.SendJson(&body, &ship)
+	err = helpers.SendJson(&body, &user)
 	if err != nil {
 		t.Error(err)
 	}
@@ -59,7 +60,7 @@ func TestProcessAddUser(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	processAddUser(c, w, r)
+	processAddUser(c, w, r, fakeVerifier)
 	stringOutput := string(w.GetOutput()[:])
 
 	if w.Calls["Write"] != 1 {
@@ -68,5 +69,27 @@ func TestProcessAddUser(t *testing.T) {
 
 	if strings.Contains(stringOutput, want) == false {
 		t.Errorf("Expected output to contain %v but output was %v", want, stringOutput)
+	}
+}
+
+func TestGetUserWithEmail(t *testing.T) {
+	c, err := aetest.NewContext(&aetest.Options{StronglyConsistentDatastore: true})
+	if err != nil {
+		t.Error(err)
+	}
+	defer c.Close()
+  email := "theman@getmoney.org"
+
+	aUser := models.User{DisplayName: "snagaMan", Email: email}
+	datastore.Put(c, datastore.NewIncompleteKey(c, "user", nil), &aUser)
+
+	user, err := getUserWithEmail(c, email)
+
+	if err != nil {
+		t.Fatalf("Unexpected error occured: %v", err.Error())
+	}
+
+	if user == nil {
+		t.Errorf("Expected 1 user to be found but got none.")
 	}
 }

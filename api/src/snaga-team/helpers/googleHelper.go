@@ -10,7 +10,10 @@ import (
 	"google.golang.org/api/oauth2/v2"
 )
 
-func VerifyGoogleToken(c appengine.Context, r *http.Request) (string, error) {
+type GoogleTokenVerifier struct {
+}
+
+func (g *GoogleTokenVerifier) VerifyToken(c appengine.Context, r *http.Request) (string, error) {
 	tokenHeader := r.Header["Auth-Token"]
 
 	if len(tokenHeader) != 1 {

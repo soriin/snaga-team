@@ -26,11 +26,11 @@ func allUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func processAllUsers(c appengine.Context, w http.ResponseWriter, r *http.Request) {
-  _, err := helpers.VerifyGoogleToken(c, r)
-  if err != nil {
-    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
-    return
-  }
+  // _, err := helpers.VerifyGoogleToken(c, r)
+  // if err != nil {
+  //   helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+  //   return
+  // }
 
   q := datastore.NewQuery("user")
   var users []models.User
@@ -55,11 +55,12 @@ func processAllUsers(c appengine.Context, w http.ResponseWriter, r *http.Request
 
 func addUser(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
-  processAddUser(c, w, r)
+  tokenVerifier := helpers.GetTokenVerifier(r)
+  processAddUser(c, w, r, tokenVerifier)
 }
 
-func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request) {
-  tokenEmail, err := helpers.VerifyGoogleToken(c, r)
+func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request, verifier helpers.TokenVerifier) {
+  tokenEmail, err := verifier.VerifyToken(c, r)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
@@ -100,13 +101,14 @@ func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request)
 
 func updateUser(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
-  processUpdateUser(c, w, r)
+  tokenVerifier := helpers.GetTokenVerifier(r)
+  processUpdateUser(c, w, r, tokenVerifier)
 }
 
-func processUpdateUser(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+func processUpdateUser(c appengine.Context, w http.ResponseWriter, r *http.Request, verifier helpers.TokenVerifier) {
   var newUser models.User
   id := mux.Vars(r)["id"]
-  tokenEmail, err := helpers.VerifyGoogleToken(c, r)
+  tokenEmail, err := verifier.VerifyToken(c, r)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
@@ -157,7 +159,7 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func processDeleteUser(c appengine.Context, w http.ResponseWriter, r *http.Request) {
-
+  helpers.SendError(w, "", http.StatusNotImplemented)
 }
 
 func getUserWithEmail(c appengine.Context, email string) (*models.User, error) {
