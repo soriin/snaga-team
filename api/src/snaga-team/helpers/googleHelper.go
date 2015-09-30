@@ -11,8 +11,6 @@ import (
 )
 
 func VerifyGoogleToken(c appengine.Context, r *http.Request) (string, error) {
-	c.Infof("Verifying token.")
-	c.Infof("%v", r.Header)
 	tokenHeader := r.Header["Auth-Token"]
 
 	if len(tokenHeader) != 1 {
