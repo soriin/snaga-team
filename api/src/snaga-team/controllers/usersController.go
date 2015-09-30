@@ -72,7 +72,7 @@ func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request)
     return
   }
   if thisUser != nil {
-    helpers.SendError(w, "", 409)
+    helpers.SendError(w, "", http.StatusConflict)
     return
   }
 
