@@ -26,6 +26,12 @@ func allUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func processAllUsers(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+  _, err := helpers.VerifyGoogleToken(c, r)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
   q := datastore.NewQuery("user")
   var users []models.User
 
@@ -53,15 +59,20 @@ func addUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request) {
+  tokenEmail, err := helpers.VerifyGoogleToken(c, r)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
   var newUser models.User
-  tokenEmail := ""
   thisUser, err := getUserWithEmail(c, tokenEmail)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
   }
   if thisUser != nil {
-    helpers.SendError(w, "", http.StatusConflict)
+    helpers.SendError(w, "", 409)
     return
   }
 
@@ -71,6 +82,7 @@ func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request)
     return
   }
 
+  newUser.Email = tokenEmail
   key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "user", nil), &newUser)
   newUser.Id = key.Encode()
 
