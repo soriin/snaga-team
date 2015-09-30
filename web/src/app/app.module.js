@@ -1,4 +1,4 @@
-angular.module('app', ['ngSanitize', 'ngResource', 'ui.router', 'ngCookies'])
+angular.module('app', ['ngSanitize', 'ngResource', 'ui.router', 'ngCookies', 'ng-polymer-elements'])
 	.constant('VERSION', '0.1.0')
 	.config(function appConfig($stateProvider, $locationProvider, $urlRouterProvider) {
 		$locationProvider.hashPrefix('!');
@@ -23,5 +23,9 @@ angular.module('app', ['ngSanitize', 'ngResource', 'ui.router', 'ngCookies'])
 			}
 		});
 
+
 		return $locationProvider.html5Mode(false);
-	});
+	}).config(['$resourceProvider', function($resourceProvider) {
+	 // Don't strip trailing slashes from calculated URLs
+	 $resourceProvider.defaults.stripTrailingSlashes = false;
+ }]);;
