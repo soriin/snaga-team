@@ -23,9 +23,13 @@ angular.module('app', ['ngSanitize', 'ngResource', 'ui.router', 'ngCookies', 'ng
 			}
 		});
 
-
 		return $locationProvider.html5Mode(false);
-	}).config(['$resourceProvider', function($resourceProvider) {
+	})
+	.config(['$resourceProvider', function($resourceProvider) {
 	 // Don't strip trailing slashes from calculated URLs
 	 $resourceProvider.defaults.stripTrailingSlashes = false;
- }]);;
+ }])
+ .config([
+	 "$httpProvider", function ($httpProvider) {
+	     $httpProvider.interceptors.push('authHttpRequestInterceptor');
+ }]);
