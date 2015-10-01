@@ -1,7 +1,21 @@
 <div class="row">
   <div class="col-sm-12">
 		{{someText}}
-    <span>First Name</span><paper-input value="{{FirstName}}"></paper-input>
-    <span>Last Name</span><paper-input value="{{LastName}}"></paper-input>
+    <div>
+      <span>First Name:</span><input ng-model="FirstName"></input>
+    </div>
+    <div>
+      <span>Last Name:</span><input ng-model="LastName"></input>
+    </div>
+    <div>
+      <span>In-Game Name:</span><input ng-model="InGameName"></input>
+    </div>
+    <div>
+      <span>Display Name:</span><input ng-model="DisplayName"></input>
+    </div>
+    <div>
+      <span>Email:</span><span>{{Email}}</span>
+    </div>
+
 	</div>
 </div>
