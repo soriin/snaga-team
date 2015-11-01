@@ -66,7 +66,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 func processGetUser(c appengine.Context, w http.ResponseWriter, r *http.Request, verifier helpers.TokenVerifier) {
   tokenEmail, err := verifier.VerifyToken(c, r)
   if err != nil {
-    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    helpers.SendError(w, err.Error(), http.StatusForbidden)
     return
   }
 
@@ -113,7 +113,7 @@ func addUser(w http.ResponseWriter, r *http.Request) {
 func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request, verifier helpers.TokenVerifier) {
   tokenEmail, err := verifier.VerifyToken(c, r)
   if err != nil {
-    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    helpers.SendError(w, err.Error(), http.StatusForbidden)
     return
   }
 
@@ -165,7 +165,7 @@ func processUpdateUser(c appengine.Context, w http.ResponseWriter, r *http.Reque
   id := mux.Vars(r)["id"]
   tokenEmail, err := verifier.VerifyToken(c, r)
   if err != nil {
-    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    helpers.SendError(w, err.Error(), http.StatusForbidden)
     return
   }
 
@@ -175,16 +175,17 @@ func processUpdateUser(c appengine.Context, w http.ResponseWriter, r *http.Reque
     return
   }
 
-  myKey, err := datastore.DecodeKey(id)
-  if err != nil {
-    helpers.SendError(w, err.Error(), http.StatusNotFound)
-    return
-  }
+  myKey, currentUserData, err := getUserWithId(c, id)
 
-  var currentUserData models.User
-  err = datastore.Get(c, myKey, &currentUserData)
   if err != nil {
-    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    var statusCode int
+    if myKey == nil {
+      statusCode = http.StatusNotFound
+    } else {
+      statusCode = http.StatusInternalServerError
+    }
+
+    helpers.SendError(w, err.Error(), statusCode)
     return
   }
 
@@ -218,9 +219,32 @@ func processDeleteUser(c appengine.Context, w http.ResponseWriter, r *http.Reque
 }
 
 func addUserGroup(w http.ResponseWriter, r *http.Request) {
-  // c := appengine.NewContext(r)
-  // tokenVerifier := helpers.GetTokenVerifier(r)
-  // processUpdateUser(c, w, r, tokenVerifier)
+  c := appengine.NewContext(r)
+  tokenVerifier := helpers.GetTokenVerifier(r)
+  processAddUserGroup(c, w, r, tokenVerifier)
+}
+
+func processAddUserGroup(c appengine.Context, w http.ResponseWriter, r *http.Request, verifier helpers.TokenVerifier) {
+  id := mux.Vars(r)["id"]
+  tokenEmail, err := verifier.VerifyToken(c, r)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusForbidden)
+    return
+  }
+
+  myKey, currentUserData, err := getUserWithId(c, id)
+
+  if err != nil {
+    var statusCode int
+    if myKey == nil {
+      statusCode = http.StatusNotFound
+    } else {
+      statusCode = http.StatusInternalServerError
+    }
+
+    helpers.SendError(w, err.Error(), statusCode)
+    return
+  }
 }
 
 func removeUserGroup(w http.ResponseWriter, r *http.Request) {
@@ -243,4 +267,19 @@ func getUserWithEmail(c appengine.Context, email string) (*models.User, error) {
   }
   x.Id = key.Encode()
   return &x, nil
+}
+
+func getUserWithId(c appengine.Context, id string) (*datastore.Key, *models.User, error) {
+  myKey, err := datastore.DecodeKey(id)
+  if err != nil {
+    return nil, nil, err
+  }
+
+  var currentUserData models.User
+  err = datastore.Get(c, myKey, &currentUserData)
+  if err != nil {
+    return myKey, nil, err
+  }
+
+  return myKey, &currentUserData, nil
 }
