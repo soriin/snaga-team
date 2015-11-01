@@ -15,9 +15,13 @@ import (
 
 func InitUserControllerHandlers(router *mux.Router) {
   router.HandleFunc("/", allUsers).Methods("GET")
+  router.HandleFunc("/{id}", getUser).Methods("GET")
   router.HandleFunc("/", addUser).Methods("POST")
   router.HandleFunc("/{id}", updateUser).Methods("PUT")
   router.HandleFunc("/", deleteUser).Methods("DELETE")
+
+  router.HandleFunc("/{id}/groups", addUserGroup).Methods("POST")
+  router.HandleFunc("/{id}/groups", removeUserGroup).Methods("DELETE")
 }
 
 func allUsers(w http.ResponseWriter, r *http.Request) {
@@ -51,6 +55,53 @@ func processAllUsers(c appengine.Context, w http.ResponseWriter, r *http.Request
   }
 
   helpers.SendJson(w, users)
+}
+
+func getUser(w http.ResponseWriter, r *http.Request) {
+  c := appengine.NewContext(r)
+  tokenVerifier := helpers.GetTokenVerifier(r)
+  processGetUser(c, w, r, tokenVerifier)
+}
+
+func processGetUser(c appengine.Context, w http.ResponseWriter, r *http.Request, verifier helpers.TokenVerifier) {
+  tokenEmail, err := verifier.VerifyToken(c, r)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
+  thisUser, err := getUserWithEmail(c, tokenEmail)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
+  if thisUser == nil {
+    // Requester doesn't have an account/isn't logged in.
+    helpers.SendError(w, "Must be logged in to view users.", http.StatusForbidden)
+    return
+  }
+
+  // At this point, the requester is a valid user.
+
+  id := mux.Vars(r)["id"]
+  myKey, err := datastore.DecodeKey(id)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusNotFound)
+    return
+  }
+
+  var currentUserData models.User
+  err = datastore.Get(c, myKey, &currentUserData)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+  err = helpers.SendJson(w, currentUserData)
+
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+  }
 }
 
 func addUser(w http.ResponseWriter, r *http.Request) {
@@ -164,6 +215,18 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 
 func processDeleteUser(c appengine.Context, w http.ResponseWriter, r *http.Request) {
   helpers.SendError(w, "", http.StatusNotImplemented)
+}
+
+func addUserGroup(w http.ResponseWriter, r *http.Request) {
+  // c := appengine.NewContext(r)
+  // tokenVerifier := helpers.GetTokenVerifier(r)
+  // processUpdateUser(c, w, r, tokenVerifier)
+}
+
+func removeUserGroup(w http.ResponseWriter, r *http.Request) {
+  // c := appengine.NewContext(r)
+  // tokenVerifier := helpers.GetTokenVerifier(r)
+  // processUpdateUser(c, w, r, tokenVerifier)
 }
 
 func getUserWithEmail(c appengine.Context, email string) (*models.User, error) {
