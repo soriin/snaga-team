@@ -1,7 +1,13 @@
-angular.module('app').factory('Users', ['$resource', function ($resource) {
-	return $resource('/api/users/:id', null,
-		{
-			'update' : {method: 'PUT'}
-		}
-	);
-}]);
+(function() {
+	'use strict';
+
+	angular.module('app').factory('Users', ['$resource', userFactory]);
+
+	function userFactory ($resource) {
+		return $resource('/api/users/:id', null,
+			{
+				'update' : {method: 'PUT'}
+			}
+		);
+	}
+})();

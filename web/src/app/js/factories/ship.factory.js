@@ -1,7 +1,13 @@
-angular.module('app').factory('Ships', ['$resource', function ($resource) {
-	return $resource('/api/ships/:id', null,
-		{
+(function() {
+	'use strict';
 
-		}
-	);
-}]);
+	angular.module('app').factory('Ships', ['$resource', shipFactory]);
+
+	function shipFactory ($resource) {
+		return $resource('/api/ships/:id', null,
+			{
+
+			}
+		);
+	}
+})();

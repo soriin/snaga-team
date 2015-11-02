@@ -1,6 +1,11 @@
-angular.module('app', ['ngSanitize', 'ngResource', 'ui.router', 'ngCookies', 'ng-polymer-elements'])
-	.constant('VERSION', '0.1.0')
-	.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
+(function() {
+	'use strict';
+
+	var app = angular.module('app', ['ngSanitize', 'ngResource', 'ui.router', 'ngCookies', 'ng-polymer-elements']);
+
+	app.constant('VERSION', '0.1.0');
+
+	app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
 	 function appConfig($stateProvider, $locationProvider, $urlRouterProvider) {
 		$locationProvider.hashPrefix('!');
 		$urlRouterProvider.otherwise("/login");
@@ -25,12 +30,15 @@ angular.module('app', ['ngSanitize', 'ngResource', 'ui.router', 'ngCookies', 'ng
 		});
 
 		return $locationProvider.html5Mode(false);
-	}])
-	.config(['$resourceProvider', function($resourceProvider) {
+	}]);
+
+	app.config(['$resourceProvider', function($resourceProvider) {
 	 // Don't strip trailing slashes from calculated URLs
 	 $resourceProvider.defaults.stripTrailingSlashes = false;
- }])
- .config([
+ }]);
+
+ app.config([
 	 "$httpProvider", function ($httpProvider) {
 	     $httpProvider.interceptors.push('authHttpRequestInterceptor');
  }]);
+})();

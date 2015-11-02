@@ -1,11 +1,17 @@
-angular.module('app').service('$currentUser', function() {
-	this.myUser = {};
+(function() {
+	'use strict';
 
-	this.SetCurrentUser = function(user) {
-		this.myUser = user;
-	};
+	angular.module('app').service('$currentUser', currentUserSvc);
 
-	this.GetCurrentUser = function() {
-		return this.myUser;
-	};
-});
+	function currentUserSvc() {
+		this.myUser = {};
+
+		this.SetCurrentUser = function(user) {
+			this.myUser = user;
+		};
+
+		this.GetCurrentUser = function() {
+			return this.myUser;
+		};
+	}
+})();

@@ -1,4 +1,8 @@
-angular.module('app').controller('ProfileCtrl', ['$scope', '$window', '$state', 'Users', 'Ships', '$currentUser',
+(function() {
+	'use strict';
+
+	angular.module('app').controller('ProfileCtrl', ['$scope', '$window', '$state', 'Users', 'Ships', '$currentUser', ProfileCtrl]);
+
 	function ProfileCtrl($scope, $window, $state, Users, Ships, $currentUser) {
 		if ($window.gapi.auth2 == undefined || $window.gapi.auth2.getAuthInstance().isSignedIn.get() == false) {
 			$state.go("login");
@@ -26,4 +30,5 @@ angular.module('app').controller('ProfileCtrl', ['$scope', '$window', '$state', 
 				Email : currentUser.Email
 			})
 		};
-}]);
+	}
+})();
