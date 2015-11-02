@@ -1,21 +1,22 @@
 (function() {
 	'use strict';
 
-	angular.module('app').controller('ProfileCtrl', ['$scope', '$window', '$state', 'Users', 'Ships', '$currentUser', ProfileCtrl]);
+	angular.module('app').controller('ProfileCtrl', ['$window', '$state', 'Users', 'Ships', '$currentUser', ProfileCtrl]);
 
-	function ProfileCtrl($scope, $window, $state, Users, Ships, $currentUser) {
+	function ProfileCtrl($window, $state, Users, Ships, $currentUser) {
+		var profileVm = this;
 		if ($window.gapi.auth2 == undefined || $window.gapi.auth2.getAuthInstance().isSignedIn.get() == false) {
 			$state.go("login");
 			return;
 		}
 
-		$scope.someText = "HI, " + $window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName();
-		$scope.update = update;
+		profileVm.someText = "HI, " + $window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName();
+		profileVm.update = update;
 
 		var me = Users.save({}, function() {
 			var user = me;
 
-			$scope.User = user;
+			profileVm.User = user;
 			$currentUser.SetCurrentUser(user);
 		});
 

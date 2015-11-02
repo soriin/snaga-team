@@ -4,8 +4,9 @@
 	angular.module('app').controller('LoginCtrl', ['$scope', '$window', '$location', '$state', '$cookieStore', LoginCtrl]);
 
   function LoginCtrl($scope, $window, $location, $state, $cookieStore) {
-  	$scope.login = login;
-  	$scope.logout = logout;
+		var loginVm = this;
+  	loginVm.login = login;
+  	loginVm.logout = logout;
 
   	$window.gapi.signin2.render('googleSigninBtn', {
       'scope': 'profile',
@@ -13,8 +14,8 @@
       'height': 40,
       'longtitle': false,
       'theme': 'dark',
-      'onsuccess': $scope.login,
-      'onfailure': $scope.loginFail
+      'onsuccess': login,
+      'onfailure': loginFail
     });
 
   	function loginFail(e) {

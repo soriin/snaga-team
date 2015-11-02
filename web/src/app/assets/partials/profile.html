@@ -1,24 +1,24 @@
 <div class="row">
   <div class="col-sm-12">
-		{{someText}}
+		{{profile.someText}}
     <div>
-      <span>First Name:</span><input ng-model="User.FirstName"></input>
+      <span>First Name:</span><input ng-model="profile.User.FirstName"></input>
     </div>
     <div>
-      <span>Last Name:</span><input ng-model="User.LastName"></input>
+      <span>Last Name:</span><input ng-model="profile.User.LastName"></input>
     </div>
     <div>
-      <span>In-Game Name:</span><input ng-model="User.InGameName"></input>
+      <span>In-Game Name:</span><input ng-model="profile.User.InGameName"></input>
     </div>
     <div>
-      <span>Display Name:</span><input ng-model="User.DisplayName"></input>
+      <span>Display Name:</span><input ng-model="profile.User.DisplayName"></input>
     </div>
     <div>
-      <span>Email:</span><span>{{User.Email}}</span>
+      <span>Email:</span><span>{{profile.User.Email}}</span>
     </div>
 
     <div>
-      <paper-button ng-click="update()" raised>Save</paper-button>
+      <paper-button ng-click="profile.update()" raised>Save</paper-button>
     </div>
 
     <div>

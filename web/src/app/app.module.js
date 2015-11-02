@@ -15,7 +15,7 @@
 			views: {
 				"mainView": {
 					templateUrl: "partials/login.html",
-					controller: 'LoginCtrl'
+					controller: 'LoginCtrl as login'
 				}
 			}
 		})
@@ -24,7 +24,7 @@
 			views: {
 				"mainView": {
 					templateUrl: "partials/profile.html",
-					controller: 'ProfileCtrl'
+					controller: 'ProfileCtrl as profile'
 				}
 			}
 		});
