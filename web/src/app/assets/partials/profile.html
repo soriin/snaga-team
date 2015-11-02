@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-12">
-		{{profile.someText}}
+		<span ng-show="profile.User">Hi, {{profile.User.FirstName}} {{profile.User.LastName}}!</span>
     <div>
       <span>First Name:</span><input ng-model="profile.User.FirstName"></input>
     </div>
