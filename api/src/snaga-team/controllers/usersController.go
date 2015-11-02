@@ -9,6 +9,7 @@ import (
   "net/http"
   "strings"
 
+  "snaga-team/config"
   "snaga-team/helpers"
   "snaga-team/models"
 )
@@ -225,9 +226,19 @@ func updateUserGroups(w http.ResponseWriter, r *http.Request) {
 
 func processUpdateUserGroups(c appengine.Context, w http.ResponseWriter, r *http.Request, verifier helpers.TokenVerifier) {
   id := mux.Vars(r)["id"]
-  _, err := verifier.VerifyToken(c, r)
+  tokenEmail, err := verifier.VerifyToken(c, r)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusForbidden)
+    return
+  }
+
+  thisUser, err := getUserWithEmail(c, tokenEmail)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+  if thisUser == nil {
+    helpers.SendError(w, "", http.StatusForbidden)
     return
   }
 
@@ -240,6 +251,11 @@ func processUpdateUserGroups(c appengine.Context, w http.ResponseWriter, r *http
 
   if content.GroupName == "" {
     helpers.SendError(w, "missing group name", http.StatusBadRequest)
+    return
+  }
+
+  if content.GroupName == config.ADMIN_GROUP_NAME && thisUser.IsAdmin() == false {
+    helpers.SendError(w, "", http.StatusForbidden)
     return
   }
 
