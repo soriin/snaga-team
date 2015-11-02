@@ -226,9 +226,21 @@ func addUserGroup(w http.ResponseWriter, r *http.Request) {
 
 func processAddUserGroup(c appengine.Context, w http.ResponseWriter, r *http.Request, verifier helpers.TokenVerifier) {
   id := mux.Vars(r)["id"]
-  tokenEmail, err := verifier.VerifyToken(c, r)
+  _, err := verifier.VerifyToken(c, r)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusForbidden)
+    return
+  }
+
+  var content addUserGroupContent
+  err = helpers.ReadJson(r.Body, &content)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
+  if content.GroupName == "" {
+    helpers.SendError(w, "missing group name", http.StatusBadRequest)
     return
   }
 
@@ -244,6 +256,31 @@ func processAddUserGroup(c appengine.Context, w http.ResponseWriter, r *http.Req
 
     helpers.SendError(w, err.Error(), statusCode)
     return
+  }
+
+  groupAlreadyAdded := false
+  for _, a := range currentUserData.Groups {
+    if a == content.GroupName {
+      groupAlreadyAdded = true
+      break
+    }
+  }
+
+  if groupAlreadyAdded == false {
+    currentUserData.Groups = append(currentUserData.Groups, content.GroupName)
+
+    _, err = datastore.Put(c, myKey, currentUserData)
+    currentUserData.Id = myKey.Encode()
+
+    if err != nil {
+      helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+      return
+    }
+  }
+  err = helpers.SendJson(w, currentUserData)
+
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
   }
 }
 
@@ -282,4 +319,8 @@ func getUserWithId(c appengine.Context, id string) (*datastore.Key, *models.User
   }
 
   return myKey, &currentUserData, nil
+}
+
+type addUserGroupContent struct {
+  GroupName string
 }
