@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 
-	angular.module('app').controller('LoginCtrl', ['$scope', '$window', '$location', '$state', '$cookieStore', LoginCtrl]);
+	angular.module('app').controller('LoginCtrl', ['$window', '$location', '$state', '$cookieStore', LoginCtrl]);
 
-  function LoginCtrl($scope, $window, $location, $state, $cookieStore) {
+  function LoginCtrl($window, $location, $state, $cookieStore) {
 		var loginVm = this;
   	loginVm.login = login;
   	loginVm.logout = logout;
@@ -34,7 +34,6 @@
       $cookieStore.put('token', id_token)
 
   		$window.gapi.auth2.getAuthInstance().then(function () { $state.go("profile"); })
-  		$scope.$digest();
   	};
 
   	function logout() {
