@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 
-	angular.module('app').controller('ProfileCtrl', ['$window', '$state', 'Users', 'Ships', '$currentUser', ProfileCtrl]);
+	angular.module('app').controller('ProfileCtrl', ['$window', '$state', 'Users', '$currentUser', ProfileCtrl]);
 
-	function ProfileCtrl($window, $state, Users, Ships, $currentUser) {
+	function ProfileCtrl($window, $state, Users, $currentUser) {
 		var profileVm = this;
 		if ($window.gapi.auth2 == undefined || $window.gapi.auth2.getAuthInstance().isSignedIn.get() == false) {
 			$state.go("login");
