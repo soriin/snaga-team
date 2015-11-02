@@ -254,7 +254,7 @@ func processUpdateUserGroups(c appengine.Context, w http.ResponseWriter, r *http
     return
   }
 
-  if content.GroupName == config.ADMIN_GROUP_NAME && thisUser.IsAdmin() == false {
+  if content.GroupName == config.ADMIN_GROUP_NAME && thisUser.IsSystemAdmin() == false {
     helpers.SendError(w, "", http.StatusForbidden)
     return
   }
@@ -287,7 +287,7 @@ func processUpdateUserGroups(c appengine.Context, w http.ResponseWriter, r *http
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
   }
-
+  currentUserData.IsAdmin = currentUserData.IsSystemAdmin()
   err = helpers.SendJson(w, currentUserData)
 
   if err != nil {

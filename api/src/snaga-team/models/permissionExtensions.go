@@ -4,7 +4,7 @@ import (
 	"snaga-team/config"
 )
 
-func (user *User) IsAdmin() bool {
+func (user *User) IsSystemAdmin() bool {
 	if user.Email == config.MASTER_EMAIL {
 		return true
 	}
