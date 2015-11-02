@@ -20,8 +20,7 @@ func InitUserControllerHandlers(router *mux.Router) {
   router.HandleFunc("/{id}", updateUser).Methods("PUT")
   router.HandleFunc("/", deleteUser).Methods("DELETE")
 
-  router.HandleFunc("/{id}/groups", addUserGroup).Methods("POST")
-  router.HandleFunc("/{id}/groups", removeUserGroup).Methods("DELETE")
+  router.HandleFunc("/{id}/groups", updateUserGroups).Methods("PUT")
 }
 
 func allUsers(w http.ResponseWriter, r *http.Request) {
@@ -218,13 +217,13 @@ func processDeleteUser(c appengine.Context, w http.ResponseWriter, r *http.Reque
   helpers.SendError(w, "", http.StatusNotImplemented)
 }
 
-func addUserGroup(w http.ResponseWriter, r *http.Request) {
+func updateUserGroups(w http.ResponseWriter, r *http.Request) {
   c := appengine.NewContext(r)
   tokenVerifier := helpers.GetTokenVerifier(r)
-  processAddUserGroup(c, w, r, tokenVerifier)
+  processUpdateUserGroups(c, w, r, tokenVerifier)
 }
 
-func processAddUserGroup(c appengine.Context, w http.ResponseWriter, r *http.Request, verifier helpers.TokenVerifier) {
+func processUpdateUserGroups(c appengine.Context, w http.ResponseWriter, r *http.Request, verifier helpers.TokenVerifier) {
   id := mux.Vars(r)["id"]
   _, err := verifier.VerifyToken(c, r)
   if err != nil {
@@ -232,7 +231,7 @@ func processAddUserGroup(c appengine.Context, w http.ResponseWriter, r *http.Req
     return
   }
 
-  var content addUserGroupContent
+  var content updateUserGroupsContent
   err = helpers.ReadJson(r.Body, &content)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
@@ -258,25 +257,21 @@ func processAddUserGroup(c appengine.Context, w http.ResponseWriter, r *http.Req
     return
   }
 
-  groupAlreadyAdded := false
-  for _, a := range currentUserData.Groups {
-    if a == content.GroupName {
-      groupAlreadyAdded = true
-      break
-    }
+  action := strings.ToLower(content.Action)
+  if action == "remove" {
+    err = removeGroupFromUser(c, myKey, currentUserData, content.GroupName)
+  } else if action == "add" {
+    err = addGroupFromUser(c, myKey, currentUserData, content.GroupName)
+  } else {
+    helpers.SendError(w, "invalid action", http.StatusBadRequest)
+    return
   }
 
-  if groupAlreadyAdded == false {
-    currentUserData.Groups = append(currentUserData.Groups, content.GroupName)
-
-    _, err = datastore.Put(c, myKey, currentUserData)
-    currentUserData.Id = myKey.Encode()
-
-    if err != nil {
-      helpers.SendError(w, err.Error(), http.StatusInternalServerError)
-      return
-    }
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
   }
+
   err = helpers.SendJson(w, currentUserData)
 
   if err != nil {
@@ -284,10 +279,49 @@ func processAddUserGroup(c appengine.Context, w http.ResponseWriter, r *http.Req
   }
 }
 
-func removeUserGroup(w http.ResponseWriter, r *http.Request) {
-  // c := appengine.NewContext(r)
-  // tokenVerifier := helpers.GetTokenVerifier(r)
-  // processUpdateUser(c, w, r, tokenVerifier)
+func removeGroupFromUser(c appengine.Context, key *datastore.Key, currentUserData *models.User, groupName string) error {
+  groupIndex := -1
+  for i, a := range currentUserData.Groups {
+    if a == groupName {
+      c.Infof("group name index: %v", i)
+      groupIndex = i
+      break
+    }
+  }
+
+  if groupIndex != -1 {
+    currentUserData.Groups = append(currentUserData.Groups[:groupIndex], currentUserData.Groups[groupIndex+1:]...)
+    c.Infof("groups to save: %v", currentUserData.Groups)
+    _, err := datastore.Put(c, key, currentUserData)
+    currentUserData.Id = key.Encode()
+
+    if err != nil {
+      return err
+    }
+  }
+  return nil
+}
+
+func addGroupFromUser(c appengine.Context, key *datastore.Key, currentUserData *models.User, groupName string) error {
+  groupAlreadyAdded := false
+  for _, a := range currentUserData.Groups {
+    if a == groupName {
+      groupAlreadyAdded = true
+      break
+    }
+  }
+
+  if groupAlreadyAdded == false {
+    currentUserData.Groups = append(currentUserData.Groups, groupName)
+
+    _, err := datastore.Put(c, key, currentUserData)
+    currentUserData.Id = key.Encode()
+
+    if err != nil {
+      return err
+    }
+  }
+  return nil
 }
 
 func getUserWithEmail(c appengine.Context, email string) (*models.User, error) {
@@ -321,6 +355,7 @@ func getUserWithId(c appengine.Context, id string) (*datastore.Key, *models.User
   return myKey, &currentUserData, nil
 }
 
-type addUserGroupContent struct {
+type updateUserGroupsContent struct {
+  Action string
   GroupName string
 }
