@@ -78,7 +78,7 @@ func processGetUser(c appengine.Context, w http.ResponseWriter, r *http.Request,
 
   if thisUser == nil {
     // Requester doesn't have an account/isn't logged in.
-    helpers.SendError(w, "Must be logged in to view users.", http.StatusForbidden)
+    helpers.SendError(w, "Must be logged in to view a user.", http.StatusForbidden)
     return
   }
 
