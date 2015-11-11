@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('app').filter('interpolate', interpolate);
+	angular.module('app.core').filter('interpolate', interpolate);
 
 	function interpolate($version) {
 		return function(text) {

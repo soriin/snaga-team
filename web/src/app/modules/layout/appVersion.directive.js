@@ -1,12 +1,12 @@
 (function() {
 	'use strict';
 
-	angular.module('app').directive('snagaAdminSwitch', adminSwitch);
+	angular.module('app.layout').directive('appVersion', appVersion);
 
-	function adminSwitch() {
+	function appVersion() {
 		return {
 			restrict: 'E',
-			template: '<div>',
+			template: '<span>Snaga Team v{{ "%VERSION%" | interpolate  }}</span>',
 			link: link
 		};
 

@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module("app").factory("authHttpRequestInterceptor", ['$cookieStore', httpRequestIntercept]);
+	angular.module("app.core").factory("authHttpRequestInterceptor", ['$cookieStore', httpRequestIntercept]);
 
 	function httpRequestIntercept ($cookieStore) {
 		var svc = {

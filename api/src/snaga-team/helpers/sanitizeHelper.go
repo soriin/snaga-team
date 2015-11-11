@@ -11,7 +11,7 @@ func SanitizeNewEvent(event *models.Event) {
 }
 
 func SanitizeEvent(newData *models.Event, storedData *models.Event) {
-  event.CancellationDate = storedData.CancellationDate
-  event.LastUpdateDate = storedData.LastUpdateDate
-  event.CreatorId = storedData.CreatorId
+  newData.CancellationDate = storedData.CancellationDate
+  newData.LastUpdateDate = storedData.LastUpdateDate
+  newData.CreatorId = storedData.CreatorId
 }

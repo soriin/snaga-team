@@ -1,26 +1,32 @@
 (function() {
 	'use strict';
 
-	angular.module('app').controller('LoginCtrl', ['$window', '$location', '$state', '$cookieStore', LoginCtrl]);
+	angular.module('app.core').controller('LoginCtrl', ['$window', '$location', '$state', '$cookieStore', LoginCtrl]);
 
   function LoginCtrl($window, $location, $state, $cookieStore) {
 		var loginVm = this;
   	loginVm.login = login;
   	loginVm.logout = logout;
 
-  	$window.gapi.signin2.render('googleSigninBtn', {
-      'scope': 'profile',
-      'width': 100,
-      'height': 40,
-      'longtitle': false,
-      'theme': 'dark',
-      'onsuccess': login,
-      'onfailure': loginFail
-    });
+		activate();
+
+		///////////////// Functions ////////////////////////
+
+		function activate() {
+	  	$window.gapi.signin2.render('googleSigninBtn', {
+	      'scope': 'profile',
+	      'width': 100,
+	      'height': 40,
+	      'longtitle': false,
+	      'theme': 'dark',
+	      'onsuccess': login,
+	      'onfailure': loginFail
+	    });
+		}
 
   	function loginFail(e) {
   		console.log(e);
-  	};
+  	}
 
   	function login(googleUser) {
   		var profile = googleUser.getBasicProfile();
@@ -34,7 +40,7 @@
       $cookieStore.put('token', id_token)
 
   		$window.gapi.auth2.getAuthInstance().then(function () { $state.go("profile"); })
-  	};
+  	}
 
   	function logout() {
   		var auth2 = $window.gapi.auth2.getAuthInstance();

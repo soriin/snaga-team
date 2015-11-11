@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('app').factory('EventAccess', ['Events', EventAccess]);
+	angular.module('app.core').factory('EventAccess', ['Events', EventAccess]);
 
 	function EventAccess(Events, logger) {
 		var svc = {
