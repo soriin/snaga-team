@@ -7,20 +7,20 @@ import (
   "github.com/gorilla/mux"
 
   "net/http"
-  "strings"
+  // "strings"
 
-  "snaga-team/config"
+  // "snaga-team/config"
   "snaga-team/helpers"
   "snaga-team/models"
 )
 
-func InitUserControllerHandlers(router *mux.Router) {
+func InitEventsControllerHandlers(router *mux.Router) {
   // Get all events
-  router.HandleFunc("/", getAllEvents).Method("GET")
-  router.HandleFunc("/{id}", getEvent).Method("GET")
-  router.HandleFunc("/", createEvent).Method("POST")
-  router.HandleFunc("/{id}", updateEvent).Method("PUT")
-  router.HandleFunc("/{id}", deleteEvent).Method("DELETE")
+  router.HandleFunc("/", getAllEvents).Methods("GET")
+  router.HandleFunc("/{id}", getEvent).Methods("GET")
+  router.HandleFunc("/", createEvent).Methods("POST")
+  router.HandleFunc("/{id}", updateEvent).Methods("PUT")
+  router.HandleFunc("/{id}", deleteEvent).Methods("DELETE")
 }
 
 func getAllEvents(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +50,7 @@ func processGetAllEvents(c appengine.Context, w http.ResponseWriter, r *http.Req
       return
     }
     x.Id = key.Encode()
-    users = append(events, x)
+    events = append(events, x)
   }
 
   helpers.SendJson(w, events)
@@ -69,7 +69,7 @@ func processGetEvent(c appengine.Context, w http.ResponseWriter, r *http.Request
     return
   }
 
-  thisUser, err := getUserWithEmail(c, tokenEmail)
+  _, err = getUserWithEmail(c, tokenEmail)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
@@ -127,7 +127,7 @@ func processCreateEvent(c appengine.Context, w http.ResponseWriter, r *http.Requ
     return
   }
 
-  helpers.SanitizeNewEvent(newEvent)
+  helpers.SanitizeNewEvent(&newEvent)
 
   // Assign data that should not be modified by the user
   newEvent.CreatorId = thisUser.Id
