@@ -3,7 +3,7 @@
 
 	angular.module('app').factory('Events', ['$resource', eventFactory]);
 
-	function userFactory ($resource) {
+	function eventFactory ($resource) {
 		return $resource('/api/events/:id', null,
 			{
 				'update' : {method: 'PUT'}

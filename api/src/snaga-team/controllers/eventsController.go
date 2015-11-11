@@ -102,7 +102,52 @@ func createEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func processCreateEvent(c appengine.Context, w http.ResponseWriter, r *http.Request, verifier helpers.TokenVerifier) {
+  tokenEmail, err := verifier.VerifyToken(c, r)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusForbidden)
+    return
+  }
 
+  var newEvent models.Event
+  thisUser, err := getUserWithEmail(c, tokenEmail)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+  if thisUser != nil {
+    if err != nil {
+      helpers.SendError(w, err.Error(), http.StatusConflict)
+    }
+    return
+  }
+
+  err = helpers.ReadJson(r.Body, &newEvent)
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
+  helpers.SanitizeNewEvent(newEvent)
+
+  // Assign data that should not be modified by the user
+  newEvent.CreatorId = thisUser.Id
+  newEvent.CreateDate = "" //TODO: When figuring out datetime, add current time here
+  newEvent.LastUpdateDate = ""
+
+  // Create new event in db
+  key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "user", nil), &newEvent)
+  newEvent.Id = key.Encode()
+
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+
+  err = helpers.SendJson(w, newEvent)
+
+  if err != nil {
+    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
+  }
 }
 
 func updateEvent(w http.ResponseWriter, r *http.Request) {

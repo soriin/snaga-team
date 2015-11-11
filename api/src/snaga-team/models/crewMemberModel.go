@@ -8,4 +8,5 @@ type CrewMember struct {
   AssignedPosition string
   AddedDate string
   LastUpdateDate string
+  IsAccepted bool
 }

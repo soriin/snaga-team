@@ -3,7 +3,7 @@
 
 	angular.module('app').controller('EventsCtrl', EventsCtrl);
 
-	function AppCtrl() {
+	function EventsCtrl() {
 		// this is the controller for the whole page
 	}
 })();

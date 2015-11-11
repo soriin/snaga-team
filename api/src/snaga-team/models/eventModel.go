@@ -9,6 +9,9 @@ type Event struct {
   LocationId string
   LocationDetails string
   Ships []EventShip
+  EventDescription string
+  DesiredHelpDescription string
+  UassignedCrew []CrewMember
 
   // Dates
   CreateDate string //TODO: Figure out datetime type

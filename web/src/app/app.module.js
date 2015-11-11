@@ -22,7 +22,7 @@
 		.state('events', {
 			url: "/events", // Main display for active events
 			views: {
-				"mainView" : {
+				"mainView": {
 					templateUrl: "partials/events.html",
 					controller: 'EventsCtrl as events'
 				}

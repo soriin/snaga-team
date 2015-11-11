@@ -8,4 +8,5 @@ type EventShip struct {
   OwnerId string
   AddedDate string
   LastUpdateDate string
+  IsAccepted bool
 }
