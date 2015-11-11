@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('app').service('$currentUser', currentUserSvc);
+	angular.module('app.core').service('$currentUser', currentUserSvc);
 
 	function currentUserSvc() {
 		this.myUser = {};

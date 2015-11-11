@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('app').directive('appVersion', appVersion);
+	angular.module('app.layout').directive('appVersion', appVersion);
 
 	function appVersion() {
 		return {

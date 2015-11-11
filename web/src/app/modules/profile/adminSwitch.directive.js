@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('app').directive('snagaAdminSwitch', adminSwitch);
+	angular.module('app.profile').directive('snagaAdminSwitch', adminSwitch);
 
 	function adminSwitch() {
 		return {

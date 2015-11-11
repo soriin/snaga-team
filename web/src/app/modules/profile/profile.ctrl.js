@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('app').controller('ProfileCtrl', ['$window', '$state', 'UserAccess', '$currentUser', 'currentData', ProfileCtrl]);
+	angular.module('app.profile').controller('ProfileCtrl', ['$window', '$state', 'UserAccess', '$currentUser', 'currentData', ProfileCtrl]);
 
 	function ProfileCtrl($window, $state, UserAccess, $currentUser, currentData) {
 		var profileVm = this;

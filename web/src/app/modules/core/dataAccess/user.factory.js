@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('app').factory('Users', ['$resource', userFactory]);
+	angular.module('app.core').factory('Users', ['$resource', userFactory]);
 
 	function userFactory ($resource) {
 		return $resource('/api/users/:id', null,

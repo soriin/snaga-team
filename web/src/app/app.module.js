@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	var app = angular.module('app', ['ngSanitize', 'ngResource', 'ui.router', 'ngCookies', 'ng-polymer-elements']);
+	var app = angular.module('app', ['app.core', 'app.events', 'app.layout', 'app.profile']);
 
 	app.constant('VERSION', '0.1.0');
 

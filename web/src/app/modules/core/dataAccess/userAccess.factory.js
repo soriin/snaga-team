@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('app').factory('UserAccess', ['Users', UserAccess]);
+	angular.module('app.core').factory('UserAccess', ['Users', UserAccess]);
 
 	function UserAccess(Users, logger) {
 		var svc = {

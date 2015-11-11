@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('app').controller('LoginCtrl', ['$window', '$location', '$state', '$cookieStore', LoginCtrl]);
+	angular.module('app.core').controller('LoginCtrl', ['$window', '$location', '$state', '$cookieStore', LoginCtrl]);
 
   function LoginCtrl($window, $location, $state, $cookieStore) {
 		var loginVm = this;

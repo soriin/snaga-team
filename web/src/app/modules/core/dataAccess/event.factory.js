@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('app').factory('Events', ['$resource', eventFactory]);
+	angular.module('app.core').factory('Events', ['$resource', eventFactory]);
 
 	function eventFactory ($resource) {
 		return $resource('/api/events/:id', null,

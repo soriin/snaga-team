@@ -47,7 +47,14 @@ exports.config = {
 					'bower_components/angular/angular.js',
 
 					// bootstrap
-					'bower_components/bootstrap/dist/js/bootstrap.js'
+					'bower_components/bootstrap/dist/js/bootstrap.js',
+
+					// module ordering
+					'app/modules/core/core.module.js',
+					'app/modules/events/events.module.js',
+					'app/modules/layout/layout.module.js',
+					'app/modules/profile/profile.module.js',
+					'app/app.module.js',
 				]
 			}
 		},
