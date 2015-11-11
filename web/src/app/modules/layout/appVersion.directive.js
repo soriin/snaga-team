@@ -6,7 +6,7 @@
 	function appVersion() {
 		return {
 			restrict: 'E',
-			template: '<span>v{{ "%VERSION%" | interpolate  }}</span>',
+			template: '<span>Snaga Team v{{ "%VERSION%" | interpolate  }}</span>',
 			link: link
 		};
 
