@@ -5,15 +5,17 @@
 
 	function ProfileCtrl($window, $state, UserAccess, $currentUser) {
 		var profileVm = this;
-		if ($window.gapi.auth2 == undefined || $window.gapi.auth2.getAuthInstance().isSignedIn.get() == false) {
-			$state.go("login");
-			return;
-		}
 
 		profileVm.someText = "HI, " + $window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName();
 		profileVm.update = update;
 
-		UserAccess.createUser().then(updateData);
+		activate();
+
+		///////////////// Functions ////////////////////////
+
+		function activate() {
+			UserAccess.createUser().then(updateData);
+		}
 
 		function update() {
 			var currentUser = $currentUser.GetCurrentUser();
