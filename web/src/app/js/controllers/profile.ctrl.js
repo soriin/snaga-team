@@ -1,20 +1,20 @@
 (function() {
 	'use strict';
 
-	angular.module('app').controller('ProfileCtrl', ['$window', '$state', 'UserAccess', '$currentUser', ProfileCtrl]);
+	angular.module('app').controller('ProfileCtrl', ['$window', '$state', 'UserAccess', '$currentUser', 'currentData', ProfileCtrl]);
 
-	function ProfileCtrl($window, $state, UserAccess, $currentUser) {
+	function ProfileCtrl($window, $state, UserAccess, $currentUser, currentData) {
 		var profileVm = this;
 
 		profileVm.someText = "HI, " + $window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName();
 		profileVm.update = update;
 
-		activate();
+		activate(currentData);
 
 		///////////////// Functions ////////////////////////
 
 		function activate() {
-			UserAccess.createUser().then(updateData);
+			updateData(currentData);
 		}
 
 		function update() {

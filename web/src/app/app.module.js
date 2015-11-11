@@ -38,6 +38,9 @@
 			},
 			data: {
 				rule: ensureLoggedIn
+			},
+			resolve: {
+				currentData: getCurrentUserData
 			}
 		});
 
@@ -45,6 +48,10 @@
 			if ($window.gapi.auth2 == undefined || $window.gapi.auth2.getAuthInstance().isSignedIn.get() == false) {
 				return { to: "login"};
 			}
+		}
+
+		function getCurrentUserData(UserAccess) {
+			return UserAccess.createUser();
 		}
 
 		return $locationProvider.html5Mode(false);
