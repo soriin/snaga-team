@@ -5,7 +5,6 @@ type CrewMember struct {
   UserId string
   UserDisplayName string
   DesiredPosition string
-  AssignedPosition string
   AddedDate string
   LastUpdateDate string
   IsAccepted bool
