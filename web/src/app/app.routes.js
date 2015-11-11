@@ -10,7 +10,7 @@
 			url: "/login", // root route
 			views: {
 				"mainView": {
-					templateUrl: "partials/login.html",
+					templateUrl: "partials/core/login.html",
 					controller: 'LoginCtrl as login'
 				}
 			}
@@ -19,7 +19,7 @@
 			url: "/events", // Main display for active events
 			views: {
 				"mainView": {
-					templateUrl: "partials/events.html",
+					templateUrl: "partials/events/events.html",
 					controller: 'EventsCtrl as events'
 				}
 			}
@@ -28,7 +28,7 @@
 			url: "/profile",
 			views: {
 				"mainView": {
-					templateUrl: "partials/profile.html",
+					templateUrl: "partials/profile/profile.html",
 					controller: 'ProfileCtrl as profile'
 				}
 			},
