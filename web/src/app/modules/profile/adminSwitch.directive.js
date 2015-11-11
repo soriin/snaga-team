@@ -6,7 +6,7 @@
 	function adminSwitch() {
 		return {
 			restrict: 'E',
-			templateUrl: 'partials/admin_switch.html',
+			templateUrl: 'partials/profile/admin_switch.html',
 			link: link
 		};
 
