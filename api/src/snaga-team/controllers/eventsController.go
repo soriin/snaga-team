@@ -132,15 +132,15 @@ func processCreateEvent(c appengine.Context, w http.ResponseWriter, r *http.Requ
   // Assign data that should not be modified by the user
   newEvent.CreatorId = thisUser.Id
 
-  currentDatetime = "" //TODO: When figuring out datetime, add current time here
+  currentDatetime := "" //TODO: When figuring out datetime, add current time here
   newEvent.CreateDate = currentDatetime
   newEvent.LastUpdateDate = currentDatetime
 
   // Iterate over each EventShip
-  for ship ; ; {
-    ship.DateAdded = currentDatetime
-    ship.LastUpdateDate = currentDatetime
-  }
+  // for ship ; ; {
+  //   ship.DateAdded = currentDatetime
+  //   ship.LastUpdateDate = currentDatetime
+  // }
 
   // Create new event in db
   key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "user", nil), &newEvent)
