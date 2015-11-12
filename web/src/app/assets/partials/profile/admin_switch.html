@@ -1,3 +1,5 @@
 <div ng-show="admin.currentUser.IsAdmin">
-	<span>Admin access: </span><paper-button ng-disabled="admin.IsAdmin" ng-click="admin.addAdmin()" raised>Add</paper-button><paper-button ng-disabled="admin.IsNotAdmin" ng-click="admin.removeAdmin()" raised>Remove</paper-button>
+	<span>Admin access: </span>
+	<paper-button ng-disabled="admin.IsAdmin" ng-click="admin.addAdmin()" raised>Add</paper-button>
+	<paper-button ng-disabled="admin.IsNotAdmin" ng-click="admin.removeAdmin()" raised>Remove</paper-button>
 </div>
