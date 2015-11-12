@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 
-	angular.module('app.core').factory('EventAccess', ['Events', EventAccess]);
+	angular.module('app.core').factory('EventAccess', ['$http', EventAccess]);
 
-	function EventAccess(Events, logger) {
+	function EventAccess($http, logger) {
 		var svc = {
 			createEvent: createEvent,
 			updateEvent: updateEvent
@@ -11,20 +11,32 @@
 		return svc;
 
 		////////////////////////////////////////
-		function createEvent() {
-			return Events.save({}).$promise.then(onSuccess).catch(onError);
+		function createEvent(body) {
+			return sendReq({
+				method: "POST",
+				url: "/api/events/",
+				data: body
+			});
 		}
 
-		function updateEvent(id, data) {
-			return Events.update({id: id}, data).$promise.then(onSuccess).catch(onError);
+		function updateEvent(id, body) {
+			return sendReq({
+				method: "PUT",
+				url: "/api/events/" + id,
+				data: body
+			});
 		}
 
-		function onSuccess(data) {
-			return data;
+		function sendReq(req) {
+			return $http(req).then(onSuccess, onError);
+		}
+
+		function onSuccess(response) {
+			return response.data;
 		}
 
 		function onError(error) {
-			//logger.error(error);
+			console.log(error);
 		}
 	}
 

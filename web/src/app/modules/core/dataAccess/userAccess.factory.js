@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 
-	angular.module('app.core').factory('UserAccess', ['Users', UserAccess]);
+	angular.module('app.core').factory('UserAccess', ['$http', UserAccess]);
 
-	function UserAccess(Users, logger) {
+	function UserAccess($http, logger) {
 		var svc = {
 			createUser: createUser,
 			updateUser: updateUser
@@ -12,19 +12,34 @@
 
 		////////////////////////////////////////
 		function createUser() {
-			return Users.save({}).$promise.then(onSuccess).catch(onError);
+			return sendReq({
+				method: "POST",
+				url: "/api/users/"
+			});
 		}
 
-		function updateUser(id, data) {
-			return Users.update({id: id}, data).$promise.then(onSuccess).catch(onError);
+		function updateUser(id, body) {
+			return sendReq({
+				method: "PUT",
+				url: "/api/users/" + id,
+				data: body
+			});
 		}
 
-		function onSuccess(data) {
-			return data;
+		function addGroup(id, groupName) {
+
+		}
+
+		function sendReq(req) {
+			return $http(req).then(onSuccess, onError);
+		}
+
+		function onSuccess(response) {
+			return response.data;
 		}
 
 		function onError(error) {
-			//logger.error(error);
+			console.log(error);
 		}
 	}
 
