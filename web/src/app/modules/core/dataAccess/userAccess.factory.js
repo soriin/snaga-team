@@ -6,7 +6,9 @@
 	function UserAccess($http, logger) {
 		var svc = {
 			createUser: createUser,
-			updateUser: updateUser
+			updateUser: updateUser,
+			addGroup: addGroup,
+			removeGroup: removeGroup
 		};
 		return svc;
 
@@ -27,7 +29,25 @@
 		}
 
 		function addGroup(id, groupName) {
+			return sendReq({
+				method: "PUT",
+				url: "/api/users/" + id + "/groups",
+				data: {
+					Action: "add",
+					GroupName: groupName
+				}
+			});
+		}
 
+		function removeGroup(id, groupName) {
+			return sendReq({
+				method: "PUT",
+				url: "/api/users/" + id + "/groups",
+				data: {
+					Action: "remove",
+					GroupName: groupName
+				}
+			});
 		}
 
 		function sendReq(req) {
@@ -43,4 +63,4 @@
 		}
 	}
 
-	})();
+})();

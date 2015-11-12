@@ -9,6 +9,7 @@
 			restrict: 'E',
 			templateUrl: 'partials/profile/admin_switch.html',
 			link: link,
+			controller: 'AdminController as admin',
 			scope: {
 				profileUser: '='
 			}
