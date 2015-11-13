@@ -7,6 +7,7 @@
 		var svc = {
 			createUser: createUser,
 			updateUser: updateUser,
+			getUser: getUser,
 			addGroup: addGroup,
 			removeGroup: removeGroup
 		};
@@ -25,6 +26,13 @@
 				method: "PUT",
 				url: "/api/users/" + id,
 				data: body
+			});
+		}
+
+		function getUser(id) {
+			return sendReq({
+				method: "GET",
+				url: "/api/users/" + id
 			});
 		}
 

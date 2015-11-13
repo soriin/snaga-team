@@ -1,22 +1,17 @@
 (function() {
 	'use strict';
 
-	angular.module('app.profile').directive('snagaAdminSwitch', ['UserAccess', '$currentUser', adminSwitch]);
+	angular.module('app.profile').directive('snagaAdminSwitch', adminSwitch);
 
-	function adminSwitch(Users, $currentUser) {
+	function adminSwitch() {
 
 		return {
 			restrict: 'E',
 			templateUrl: 'partials/profile/admin_switch.html',
-			link: link,
 			controller: 'AdminController as admin',
 			scope: {
 				profileUser: '='
 			}
 		};
-
-		function link($scope, $element, $attrs) {
-			$scope.currentUser = $currentUser.GetCurrentUser();
-		}
 	}
 })();

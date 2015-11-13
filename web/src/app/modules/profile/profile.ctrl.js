@@ -1,37 +1,40 @@
 (function() {
 	'use strict';
 
-	angular.module('app.profile').controller('ProfileCtrl', ['$window', '$state', 'UserAccess', '$currentUser', 'currentData', ProfileCtrl]);
+	angular.module('app.profile').controller('ProfileCtrl',
+	['$window', '$state', 'UserAccess', '$rootScope', 'profileData', '$stateParams', ProfileCtrl]);
 
-	function ProfileCtrl($window, $state, UserAccess, $currentUser, currentData) {
+	function ProfileCtrl($window, $state, UserAccess, $rootScope, profileData, $stateParams) {
 		var profileVm = this;
 
-		profileVm.someText = "HI, " + $window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName();
+		// profileVm.someText = "HI, " + $window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName();
 		profileVm.update = update;
+		profileVm.user = {};
 
-		activate(currentData);
+		activate(profileData);
 
 		///////////////// Functions ////////////////////////
 
-		function activate() {
-			updateData(currentData);
+		function activate(data) {
+			setProfileData(data);
 		}
 
 		function update() {
-			var currentUser = $currentUser.GetCurrentUser();
-			UserAccess.updateUser(currentUser.Id, {
-				FirstName : currentUser.FirstName,
-				LastName : currentUser.LastName,
-				DisplayName : currentUser.DisplayName,
-				InGameName : currentUser.InGameName,
-				Email : currentUser.Email
-			}).then(updateData);
+			UserAccess.updateUser(profileVm.user.Id, {
+				FirstName : profileVm.user.FirstName,
+				LastName : profileVm.user.LastName,
+				DisplayName : profileVm.user.DisplayName,
+				InGameName : profileVm.user.InGameName,
+				Email : profileVm.user.Email
+			}).then(setProfileData);
 		}
 
-		function updateData(data) {
-			var user = data;
-			profileVm.User = user;
-			$currentUser.SetCurrentUser(user);
+		function setProfileData(data) {
+			profileVm.user = data;
+
+			if ($rootScope.currentUser.UserId == data.UserId) {
+				$rootScope.currentUser = data;
+			}
 		}
 	}
 })();

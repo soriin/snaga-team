@@ -12,7 +12,8 @@
     <!-- <link rel="import" href="bower_components/paper-input/paper-input.html"> -->
     <base href="/" />
   </head>
-  <body ng-controller="AppCtrl">
+  <body ng-controller="AppCtrl as app">
+		<span ng-show="app.currentUser">Hi, {{app.currentUser.FirstName}} {{app.currentUser.LastName}}!</span>
     <div class="container">
       <div ng-include="'partials/core/login_nav.html'" ng-controller="LoginCtrl as login"></div>
     </div>

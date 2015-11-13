@@ -5,5 +5,6 @@
 
 	function AppCtrl() {
 		// this is the controller for the whole page
+		var appVm = this;
 	}
 })();

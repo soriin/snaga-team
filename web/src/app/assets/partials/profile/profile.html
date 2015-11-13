@@ -1,20 +1,19 @@
 <div class="row">
   <div class="col-sm-12">
-		<span ng-show="profile.User">Hi, {{profile.User.FirstName}} {{profile.User.LastName}}!</span>
     <div>
-      <span>First Name:</span><input ng-model="profile.User.FirstName"></input>
+      <span>First Name:</span><input ng-model="profile.user.FirstName"></input>
     </div>
     <div>
-      <span>Last Name:</span><input ng-model="profile.User.LastName"></input>
+      <span>Last Name:</span><input ng-model="profile.user.LastName"></input>
     </div>
     <div>
-      <span>In-Game Name:</span><input ng-model="profile.User.InGameName"></input>
+      <span>In-Game Name:</span><input ng-model="profile.user.InGameName"></input>
     </div>
     <div>
-      <span>Display Name:</span><input ng-model="profile.User.DisplayName"></input>
+      <span>Display Name:</span><input ng-model="profile.user.DisplayName"></input>
     </div>
     <div>
-      <span>Email:</span><span>{{profile.User.Email}}</span>
+      <span>Email:</span><span>{{profile.user.Email}}</span>
     </div>
 
     <div>
@@ -22,7 +21,7 @@
     </div>
 
     <div>
-      <snaga-admin-switch ng-show="profile.User" profile-user="profile.User"></snaga-admin-switch>
+      <snaga-admin-switch profile-user="profile.user"></snaga-admin-switch>
     </div>
 
 	</div>

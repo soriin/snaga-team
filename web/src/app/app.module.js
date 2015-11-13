@@ -15,17 +15,25 @@
 	     $httpProvider.interceptors.push('authHttpRequestInterceptor');
 	}]);
 
-	app.run(function($rootScope, $state, $currentUser, $window) {
+	app.run(function($rootScope) {
 	  $rootScope.$on('$stateChangeStart', function(e, to) {
-	    if (to.data == undefined || !angular.isFunction(to.data.rule)) return;
-	    var result = to.data.rule($currentUser, $window);
+			console.log("routing to:");
+			console.log(to);
+	  });
+	});
 
-	    if (result && result.to) {
-	      e.preventDefault();
-	      // Optionally set option.notify to false if you don't want
-	      // to retrigger another $stateChangeStart event
-	      $state.go(result.to, result.params, {notify: false});
-	    }
+	app.run(function($rootScope) {
+	  $rootScope.$on('$stateChangeSuccess', function(e, to) {
+			console.log("routed to:");
+			console.log(to);
+	  });
+	});
+
+	app.run(function($rootScope) {
+	  $rootScope.$on('$stateChangeError', function(e, toState, toParams, fromState, fromParams, error) {
+			console.log("error routing to:");
+			console.log(toState);
+			console.error(error);
 	  });
 	});
 })();

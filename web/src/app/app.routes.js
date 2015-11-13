@@ -6,6 +6,9 @@
 		$locationProvider.hashPrefix('!');
 		$urlRouterProvider.otherwise("/login");
 
+		var getProfileRes = ['UserAccess', '$stateParams', '$q', 'currentUser', getProfileData];
+		var getCurrentUserRes = ['UserAccess', '$window', '$rootScope', '$q', '$state', fetchCurrentUser]
+
 		$stateProvider.state('login', {
 			url: "/login", // root route
 			views: {
@@ -32,22 +35,62 @@
 					controller: 'ProfileCtrl as profile'
 				}
 			},
-			data: {
-				rule: ensureLoggedIn
+			resolve: {
+				currentUser: getCurrentUserRes,
+				profileData: getProfileRes
+			}
+		})
+		.state('profile-other', {
+			url: "/profile/:userId",
+			views: {
+				"mainView": {
+					templateUrl: "partials/profile/profile.html",
+					controller: 'ProfileCtrl as profile'
+				}
 			},
 			resolve: {
-				currentData: getCurrentUserData
+				currentUser: getCurrentUserRes,
+				profileData: getProfileRes
 			}
 		});
 
-		function ensureLoggedIn(user, $window) {
-			if ($window.gapi.auth2 == undefined || $window.gapi.auth2.getAuthInstance().isSignedIn.get() == false) {
-				return { to: "login"};
+		function fetchCurrentUser(UserAccess, $window, $rootScope, $q, $state) {
+			console.log("entering fetchCurrentUser");
+			if (!!$rootScope.currentUser) {
+				return $rootScope.currentUser;
 			}
+			var defer = $q.defer();
+			if (!!$window.gapi.auth2 && $window.gapi.auth2.getAuthInstance().isSignedIn.get() == true) {
+				console.log("fetching current user");
+				UserAccess.createUser().then(function(data) {
+					if (!!data) {
+						console.log("setting current user");
+						$rootScope.currentUser = data;
+						defer.resolve(data);
+					}
+					else {
+						console.error("error fetching current user");
+						defer.reject();
+					}
+				});
+			}
+			else {
+				defer.reject();
+				$state.go("login");
+			}
+
+			return defer.promise;
+
+			console.log("not fetching current user");
 		}
 
-		function getCurrentUserData(UserAccess) {
-			return UserAccess.createUser();
+		function getProfileData(UserAccess, $stateParams, $q, currentUser) {
+			if ($stateParams.userId === undefined) {
+				console.log("getProfileData returning current user");
+				return currentUser;
+			}
+			console.log("getProfileData fetching userId "+ $stateParams.userId);
+			return UserAccess.getUser($stateParams.userId);
 		}
 
 		return $locationProvider.html5Mode(false);
