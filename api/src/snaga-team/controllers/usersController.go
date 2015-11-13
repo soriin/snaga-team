@@ -85,19 +85,13 @@ func processGetUser(c appengine.Context, w http.ResponseWriter, r *http.Request,
   // At this point, the requester is a valid user.
 
   id := mux.Vars(r)["id"]
-  myKey, err := datastore.DecodeKey(id)
-  if err != nil {
-    helpers.SendError(w, err.Error(), http.StatusNotFound)
-    return
-  }
+  _, userData, err := getUserWithId(c, id)
 
-  var currentUserData models.User
-  err = datastore.Get(c, myKey, &currentUserData)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
   }
-  err = helpers.SendJson(w, currentUserData)
+  err = helpers.SendJson(w, userData)
 
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
