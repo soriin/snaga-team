@@ -33,7 +33,7 @@
 	  $rootScope.$on('$stateChangeError', function(e, toState, toParams, fromState, fromParams, error) {
 			console.log("error routing to:");
 			console.log(toState);
-			console.error(error);
+			console.log(error);
 	  });
 	});
 })();
