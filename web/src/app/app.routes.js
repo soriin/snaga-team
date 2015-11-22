@@ -4,13 +4,16 @@
 	angular.module('app').config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
 	 function appConfig($stateProvider, $locationProvider, $urlRouterProvider) {
 		$locationProvider.hashPrefix('!');
-		$urlRouterProvider.otherwise("/login");
+		$urlRouterProvider.otherwise("/events");
 
 		var getProfileRes = ['UserAccess', '$stateParams', '$q', 'currentUser', getProfileData];
 		var getCurrentUserRes = ['UserAccess', '$window', '$rootScope', '$q', '$state', fetchCurrentUser]
 
-		$stateProvider.state('login', {
-			url: "/login", // root route
+		$stateProvider.state('wrapper', {
+			templateUrl: "partials/layout/default.layout.html"
+		})
+		.state('login', {
+			url: "/login",
 			views: {
 				"mainView": {
 					templateUrl: "partials/core/login.html",
@@ -19,15 +22,17 @@
 			}
 		})
 		.state('events', {
+			parent: 'wrapper',
 			url: "/events", // Main display for active events
 			views: {
 				"mainView": {
-					templateUrl: "partials/events/events.html",
+					templateUrl: "partials/events/events.list.html",
 					controller: 'EventsCtrl as events'
 				}
 			}
 		})
 		.state('profile', {
+			parent: 'wrapper',
 			url: "/profile",
 			views: {
 				"mainView": {
@@ -66,11 +71,13 @@
 					if (!!data) {
 						console.log("setting current user");
 						$rootScope.currentUser = data;
+						$rootScope.isLoggedIn = true;
 						defer.resolve(data);
 					}
 					else {
 						console.error("error fetching current user");
 						defer.reject();
+						$state.go("events");
 					}
 				});
 			}

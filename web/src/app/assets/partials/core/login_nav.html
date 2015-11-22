@@ -1,5 +1,11 @@
 <div class="row">
   <div class="col-sm-12">
-    <paper-button class="login-btn" ng-click="login.logout()" raised>Sign Out</paper-button>
+    <div ng-show="login.isLoggedIn">
+      <paper-button class="login-btn" ng-click="login.logout()" raised>Sign Out</paper-button>
+    </div>
+    <div ng-show="!login.isLoggedIn">
+      <paper-button class="login-btn" ng-click="login.renderLogin()" ng-show="login.notRendered" raised>Sign In</paper-button>
+      <div id="googleSigninBtn"></div>
+    </div>
   </div>
 </div>
