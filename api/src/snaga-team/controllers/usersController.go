@@ -110,10 +110,12 @@ func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request,
     helpers.SendError(w, err.Error(), http.StatusForbidden)
     return
   }
+  c.Infof("Token verified");
 
   var newUser models.User
   thisUser, err := getUserWithEmail(c, tokenEmail)
   if err != nil {
+    c.Infof("Error getting user object from email");
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
   }
@@ -121,14 +123,9 @@ func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request,
     err = helpers.SendJson(w, thisUser)
 
     if err != nil {
+      c.Infof("Error sending Json of user back to client.");
       helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     }
-    return
-  }
-
-  err = helpers.ReadJson(r.Body, &newUser)
-  if err != nil {
-    helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
   }
 
@@ -137,6 +134,7 @@ func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request,
   newUser.Id = key.Encode()
 
   if err != nil {
+    c.Infof("Error writing to datastore");
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
   }
@@ -144,6 +142,7 @@ func processAddUser(c appengine.Context, w http.ResponseWriter, r *http.Request,
   err = helpers.SendJson(w, newUser)
 
   if err != nil {
+    c.Infof("Error sending updated user data back to client");
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
   }
 }
