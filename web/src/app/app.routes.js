@@ -27,7 +27,17 @@
 			views: {
 				"mainView": {
 					templateUrl: "partials/events/events.list.html",
-					controller: 'EventsCtrl as events'
+					controller: 'EventsListCtrl as events'
+				}
+			}
+		})
+		.state('events.new', {
+			parent: 'wrapper',
+			url: "/events/new", // Main display for active events
+			views: {
+				"mainView": {
+					templateUrl: "partials/events/events.new.html",
+					controller: 'EventsNewCtrl as event'
 				}
 			}
 		})
