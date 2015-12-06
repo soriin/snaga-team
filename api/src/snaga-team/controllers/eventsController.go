@@ -107,14 +107,13 @@ func processCreateEvent(c appengine.Context, w http.ResponseWriter, r *http.Requ
     helpers.SendError(w, err.Error(), http.StatusForbidden)
     return
   }
-
   var newEvent models.Event
   thisUser, err := getUserWithEmail(c, tokenEmail)
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
   }
-  if thisUser != nil {
+  if thisUser == nil {
     if err != nil {
       helpers.SendError(w, err.Error(), http.StatusConflict)
     }
@@ -128,6 +127,7 @@ func processCreateEvent(c appengine.Context, w http.ResponseWriter, r *http.Requ
   }
 
   helpers.SanitizeNewEvent(&newEvent)
+  c.Infof("Title" + newEvent.Title)
 
   // Assign data that should not be modified by the user
   newEvent.CreatorId = thisUser.Id
@@ -143,13 +143,13 @@ func processCreateEvent(c appengine.Context, w http.ResponseWriter, r *http.Requ
   // }
 
   // Create new event in db
-  key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "user", nil), &newEvent)
-  newEvent.Id = key.Encode()
+  key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "event", nil), &newEvent)
 
   if err != nil {
     helpers.SendError(w, err.Error(), http.StatusInternalServerError)
     return
   }
+  newEvent.Id = key.Encode()
 
   err = helpers.SendJson(w, newEvent)
 

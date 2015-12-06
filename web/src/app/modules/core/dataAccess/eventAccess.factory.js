@@ -6,11 +6,19 @@
 	function EventAccess($http, logger) {
 		var svc = {
 			createEvent: createEvent,
-			updateEvent: updateEvent
+			updateEvent: updateEvent,
+			getEvents: getEvents
 		};
 		return svc;
 
 		////////////////////////////////////////
+		function getEvents() {
+			return sendReq({
+				method: "GET",
+				url: "/api/events/"
+			});
+		}
+
 		function createEvent(body) {
 			return sendReq({
 				method: "POST",

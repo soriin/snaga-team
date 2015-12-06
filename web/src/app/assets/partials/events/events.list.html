@@ -3,3 +3,12 @@
 </div>
 
 <span>Events List!!!</span>
+
+<div class="events-container">
+	<div ng-repeat="event in events.Events">
+		<span>{{event.Title}}</span>
+		<span>{{event.Date}}</span>
+		<span>{{event.Location}}</span>
+		<span>{{event.LocationSpecifics}}</span>
+	</div>
+</div>
